@@ -1,0 +1,18 @@
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::3857" } },
+"features": [
+{ "type": "Feature", "properties": { "Bassin": "ARMAGNAC" }, "geometry": { "type": "Point", "coordinates": [ 25336.7282565622736, 5436644.057492777705193 ] } },
+{ "type": "Feature", "properties": { "Bassin": "COGNAC" }, "geometry": { "type": "Point", "coordinates": [ -44682.812618602496514, 5734674.439160792157054 ] } },
+{ "type": "Feature", "properties": { "Bassin": "VIN DOUX NATURELS" }, "geometry": { "type": "Point", "coordinates": [ 332615.305896225501783, 5286241.772159852087498 ] } },
+{ "type": "Feature", "properties": { "Bassin": "ALSACE ET EST" }, "geometry": { "type": "Point", "coordinates": [ 771555.727120068971999, 6173897.656538522802293 ] } },
+{ "type": "Feature", "properties": { "Bassin": "BOURGOGNE BEAUJOLAIS SAVOIE JURA" }, "geometry": { "type": "Point", "coordinates": [ 543951.276046755257994, 5878070.146132498048246 ] } },
+{ "type": "Feature", "properties": { "Bassin": "CHAMPAGNE" }, "geometry": { "type": "Point", "coordinates": [ 453463.654023251205217, 6254191.69928240403533 ] } },
+{ "type": "Feature", "properties": { "Bassin": "LANGUEDOC-ROUSSILLON" }, "geometry": { "type": "Point", "coordinates": [ 333062.554621056653559, 5345116.166325576603413 ] } },
+{ "type": "Feature", "properties": { "Bassin": "PROVENCE-CORSE" }, "geometry": { "type": "Point", "coordinates": [ 815543.981816824991256, 5291901.521989029832184 ] } },
+{ "type": "Feature", "properties": { "Bassin": "SUD-OUEST" }, "geometry": { "type": "Point", "coordinates": [ -28505.97322596070444, 5594816.095520872622728 ] } },
+{ "type": "Feature", "properties": { "Bassin": "TOULOUSE-PYRENEES" }, "geometry": { "type": "Point", "coordinates": [ 116597.1859382980183, 5456560.37470612488687 ] } },
+{ "type": "Feature", "properties": { "Bassin": "VAL DE LOIRE" }, "geometry": { "type": "Point", "coordinates": [ 96495.430210148260812, 5957155.562001006677747 ] } },
+{ "type": "Feature", "properties": { "Bassin": "VALLEE DU RHÔNE" }, "geometry": { "type": "Point", "coordinates": [ 543553.047342086909339, 5490320.511844208464026 ] } }
+]
+}

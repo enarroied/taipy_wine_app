@@ -1,0 +1,46 @@
+
+[DATA_NODE.WINE_PRODUCTION]
+storage_type = "csv"
+default_path = "data/wine_harvest_france_aoc_09_19.csv"
+scope = "SCENARIO:SCOPE"
+
+[TASK.ADD_WINE_COLORS]
+inputs = []
+outputs = []
+function = "config.functions.add_wine_colors:function"
+skippable = "False:bool"
+
+[DATA_NODE.WINE_PRODUCTION_WITH_COLORS]
+storage_type = "pickle"
+scope = "SCENARIO:SCOPE"
+
+[PIPELINE.PIPELINE_WINE]
+tasks = ["ADD_WINE_STATS:SECTION", "ADD_GEOMETRY:SECTION"]
+
+[SCENARIO.SCENARIO_WINE]
+pipelines = ["PIPELINE_WINE:SECTION"]
+
+[TASK.ADD_WINE_STATS]
+inputs = ["WINE_PRODUCTION:SECTION"]
+outputs = ["WINE_PRODUCTION_WITH_STATS:SECTION"]
+function = "config.functions.add_basic_stats:function"
+skippable = "False:bool"
+
+[DATA_NODE.WINE_PRODUCTION_WITH_STATS]
+storage_type = "pickle"
+scope = "SCENARIO:SCOPE"
+
+[TASK.ADD_GEOMETRY]
+inputs = ["WINE_PRODUCTION_WITH_STATS:SECTION", "GEOMETRY:SECTION"]
+outputs = ["WINE_PRODUCTION_WITH_GEOMETRY:SECTION"]
+function = "config.functions.add_geometry:function"
+skippable = "False:bool"
+
+[DATA_NODE.WINE_PRODUCTION_WITH_GEOMETRY]
+storage_type = "pickle"
+scope = "SCENARIO:SCOPE"
+
+[DATA_NODE.GEOMETRY]
+storage_type = "json"
+default_path = "data/french_wine_bassin_centroids.geojson"
+scope = "SCENARIO:SCOPE"
