@@ -4,6 +4,5 @@ This is a small app created with Taipy. It is a dashboard that shows the wine pr
 
 I used Taipy 2.3.
 
-File structure:
 
 
