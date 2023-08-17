@@ -1,7 +1,5 @@
-from tracemalloc import stop
 import pandas as pd
 import geopandas as gpd
-from sqlalchemy import column
 
 
 def add_wine_colors():
