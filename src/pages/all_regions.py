@@ -128,7 +128,6 @@ marker_map_red = {
     "size": "size",
     "showscale": True,
     "colorscale": "RdBu",
-    "hoverinfo": "text",
 }
 
 layout_map_red = {
@@ -151,7 +150,10 @@ layout_map_white = {
     },
 }
 
-options_map = {"unselected": {"marker": {"opacity": 0.8}}}
+options_map = {
+    "unselected": {"marker": {"opacity": 0.8}},
+    "hovertemplate": "<b>%{text}</b>" + "<extra></extra>",
+}
 
 ##############################################################################################################
 
