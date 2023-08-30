@@ -86,7 +86,7 @@ by_region_md = """
 
 <|layout|columns= 1 2|
 
-<|{selected_region}|selector|lov={list_of_regions}|on_change=on_change_region|dropdown|label=Chose Region|>
+<|{selected_region}|selector|lov={list_of_regions}|on_change=on_change_region|dropdown|label=Choose Region|>
 # Wine production | **by Region**{: .color-primary}
 
 |>

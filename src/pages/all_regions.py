@@ -77,7 +77,7 @@ white_production = df_wine_year[df_wine_year["wine_type"] == "WHITE"][
 
 def on_change(state):
     print("Chosen year: ", state.selected_year)
-    print("Chose region type: ", state.selected_area)
+    print("Choose region type: ", state.selected_area)
     state.df_wine_year = get_df_wine_year_and_area(
         state.selected_year, state.selected_area
     )
@@ -162,7 +162,7 @@ all_regions_md = """
 
 <|layout|columns= 1 2|
 
-<|{selected_year}|selector|lov={year_list}|on_change=on_change|dropdown|label=Chose Year|>
+<|{selected_year}|selector|lov={year_list}|on_change=on_change|dropdown|label=Choose Year|>
 
 # AOC Wine production | **<|{selected_year}|text|raw|> Campaign**{: .color-primary} | All Regions
 |>
