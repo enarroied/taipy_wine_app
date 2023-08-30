@@ -205,7 +205,7 @@ all_regions_md = """
 
 
 ## Data for all the regions:
-<|{df_wine_production}|table|height=400px|width=95%|>
+<|{df_wine_production}|table|height=400px|width=100%|>
 
 
 """
