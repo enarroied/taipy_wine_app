@@ -57,6 +57,14 @@ def get_df_wine_year_and_area(year, area_type):
     df_wine_year = df_wine_year.reset_index()
     df_wine_year = df_wine_year.sort_values(by=["Production"])
 
+    # Add a column to display a cleaner and shorter label in the bar chart
+
+    df_wine_year["Wine Region"] = (
+        (df_wine_year["Region"].str.replace(r"[a-zA-Z]/ ", "", regex=True))
+        .str.replace(r" \(.+", "", regex=True)
+        .str.replace(r" including.+", "", regex=True)
+    )
+
     return df_wine_year
 
 
@@ -95,22 +103,26 @@ def on_change(state):
     state.df_map_white = get_df_map_color(state.selected_year, "WHITE")
 
 
-bar_chart_layout = {"yaxis": {"range": [0, 600]}}
+bar_chart_layout = {
+    "yaxis": {"range": [0, 600]},
+    "xaxis": {"automargin": True, "title": ""},
+    "xlabel": "None",
+}
 
 property_barchart_red_rose = {
     "type": "bar",
-    "x": "Region",
+    "x": "Wine Region",
     "y[1]": "Production",
     "color[1]": "#900020",
-    "title": "Production of Red wines (Million Liters)",
+    "title": "Production of Red wines by Region (Million Liters)",
 }
 
 property_barchart_white = {
     "type": "bar",
-    "x": "Region",
+    "x": "Wine Region",
     "y[1]": "Production",
     "color[1]": "#E0C095",
-    "title": f"Production of White wines (Million Liters)",
+    "title": f"Production of White wines by Region (Million Liters)",
 }
 
 ##############################################################################################################
@@ -190,9 +202,9 @@ all_regions_md = """
 <|{selected_area}|toggle|lov={area_type_list}|on_change=on_change|>
 
 <|layout|columns=1 1|
-<|{df_wine_year[df_wine_year["wine_type"] == "RED AND ROSE"]}|chart|properties={property_barchart_red_rose}|layout={bar_chart_layout}|>
+<|{df_wine_year[df_wine_year["wine_type"] == "RED AND ROSE"]}|chart|properties={property_barchart_red_rose}|layout={bar_chart_layout}|height=800px|>
 
-<|{df_wine_year[df_wine_year["wine_type"] == "WHITE"]}|chart|properties={property_barchart_white}|layout={bar_chart_layout}|>
+<|{df_wine_year[df_wine_year["wine_type"] == "WHITE"]}|chart|properties={property_barchart_white}|layout={bar_chart_layout}|height=800px|>
 |>
 
 ## Production Maps, **<|{selected_year}|text|raw|>**{: .color-primary}:
