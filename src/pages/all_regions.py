@@ -172,12 +172,12 @@ options_map = {
 
 all_regions_md = """
 
-<|layout|columns= 1 2|
+
 
 <|{selected_year}|selector|lov={year_list}|on_change=on_change|dropdown|label=Choose Year|>
 
 # AOC Wine production | **<|{selected_year}|text|raw|> Campaign**{: .color-primary} | All Regions
-|>
+
 
 
 <|layout|columns=1 1 1|
