@@ -105,7 +105,7 @@ def on_change(state):
 
 bar_chart_layout = {
     "yaxis": {"range": [0, 600]},
-    "xaxis": {"automargin": True, "title": ""},
+    "xaxis": {"automargin": True},
     "xlabel": "None",
 }
 
