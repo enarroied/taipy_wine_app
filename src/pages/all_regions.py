@@ -181,21 +181,25 @@ all_regions_md = """
 
 
 <|layout|columns=1 1 1|
-<total_production|
+
+<|card card-bg|
 ## **Total:**{: .color-primary}
-###<|{f'{int(total_production / 10) } Million Liters'}|>
-|total_production>
-
-<red_rose_production|
-## **Red / Rosé:**{: .color-primary}
-###<|{f'{int(red_rose_production / 10) } Million Liters'}|>
-|red_rose_production>
-
-<white_production|
-## **White:**{: .color-primary}
-###<|{f'{int(white_production / 10) } Million Liters'}|>
-|white_production>
+\n
+### <|{f'{int(total_production / 10) } Million Liters'}|>
 |>
+<|card card-bg|
+## **Red / Rosé:**{: .color-primary}
+\n
+###<|{f'{int(red_rose_production / 10) } Million Liters'}|>
+|>
+<|card card-bg|
+## **White:**{: .color-primary}
+\n
+###<|{f'{int(white_production / 10) } Million Liters'}|>
+|>
+
+|>
+
 
 ## Production **by <|{selected_area}|text|raw|>**{: .color-primary}
 
