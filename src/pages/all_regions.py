@@ -25,7 +25,27 @@ area_type_list = ["AOC", "Region"]
 selected_area = area_type_list[0]
 
 
-def get_df_map_color(year, color):
+def get_df_map_color(
+    year: str, color: str, df_wine_with_geometry: pd.DataFrame = df_wine_with_geometry
+) -> pd.DataFrame:
+    """Create a DataFrame for map coloring based on wine production data.
+
+    This function takes a specific year and wine color, and extracts relevant information
+    from the original wine production DataFrame (`df_wine_with_geometry`). It creates a DataFrame
+    suitable for map coloring, including information about regions, latitude, longitude, production,
+    size, and text.
+
+    Args:
+        year (str): The selected year for wine production data.
+        color (str): The selected wine color (e.g., 'RED AND ROSE', 'WHITE').
+        df_wine_with_geometry (pd.DataFrame, optional): DataFrame containing wine production and
+                                                         geographical information. Defaults to
+                                                         the global variable `df_wine_with_geometry`.
+
+    Returns:
+        df_map_color (pd.DataFrame): A DataFrame with information for map coloring.
+    """
+
     df_geometry_color = df_wine_with_geometry[
         df_wine_with_geometry["wine_type"] == color
     ].copy()
