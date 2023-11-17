@@ -45,21 +45,28 @@ def add_basic_stats(df_wine: pd.DataFrame) -> pd.DataFrame:
 def add_geometry(
     df_wine_with_stats: pd.DataFrame, geometry: pd.DataFrame
 ) -> pd.DataFrame:
-    """_summary_
+    """Add geographical information to a DataFrame containing wine production statistics.
+
+    This function takes a DataFrame with wine production statistics (`df_wine_with_stats`)
+    and a DataFrame with geographical information (`geometry`). It adds geographical data to
+    the wine production DataFrame (including latitude and longitude).
 
     Args:
-        df_wine_with_stats (_type_): _description_
-        df_geometry (_type_): _description_
+        df_wine_with_stats (pd.DataFrame): DataFrame containing wine production statistics
+                                            for various regions and wine types.
+        geometry (pd.DataFrame): DataFrame with geometrical information, including the
+                                 'geometry' column containing the geographical shapes.
 
     Returns:
-        _type_: _description_
+        df_wine_with_geometry (pd.DataFrame): A new DataFrame with additional geographical information,
+                      including latitude and longitude, added to the wine production data.
     """
     df_geometry = gpd.GeoDataFrame.from_features(geometry, crs=3857)
 
     # Reproject to EPSG:4326 to be able to extract Lon and Lat
     df_geometry = df_geometry.to_crs(epsg=4326)
 
-    df_wine_with_geometry = df_wine_with_stats
+    df_wine_with_geometry = df_wine_with_stats.copy()
 
     # Drop the rows that are subsets (so we don't count in aggregation)
     rows_to_drop = df_wine_with_geometry["AOC"].str.contains("(subset)")
