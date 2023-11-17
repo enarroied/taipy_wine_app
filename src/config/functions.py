@@ -56,11 +56,6 @@ def add_geometry(
 
     df_wine_with_geometry = df_wine_with_stats
 
-    # This is a dirty patch to solve encoding problems:
-    df_geometry["Bassin"] = df_geometry["Bassin"].str.replace(
-        "VALLEE DU RHÃ”NE", "VALLEE DU RHÔNE"
-    )
-
     # Drop the rows that are subsets (so we don't count in aggregation)
     rows_to_drop = df_wine_with_geometry["AOC"].str.contains("(subset)")
     df_wine_with_geometry = df_wine_with_geometry.drop(
