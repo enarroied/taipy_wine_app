@@ -155,6 +155,10 @@ def on_change(state: Any) -> None:
     state.df_map_white = get_df_map_color(state.selected_year, "WHITE")
 
 
+##############################################################################################################
+##                                      Chart properties:                                                   ##
+##############################################################################################################
+
 bar_chart_layout = {
     "yaxis": {"range": [0, 600]},
     "xaxis": {"automargin": True},
@@ -222,15 +226,14 @@ options_map = {
 }
 
 ##############################################################################################################
-
+##                                      Taipy Code:                                                         ##
+##############################################################################################################
 
 all_regions_md = """
 
 <|{selected_year}|selector|lov={year_list}|on_change=on_change|dropdown|label=Choose Year|>
 
 # AOC Wine production | **<|{selected_year}|text|raw|> Campaign**{: .color-primary} | All Regions
-
-
 
 <|layout|columns=1 1 1|
 
@@ -270,9 +273,6 @@ all_regions_md = """
 <|{df_map_white}|chart|type=scattermapbox|lat=latitude|lon=longitude|marker={marker_map_white}|layout={layout_map_white}|text=text|mode=markers|height=600px|options={options_map}|>
 |>
 
-
 ## Data for all the regions:
 <|{df_wine_production}|table|height=400px|width=100%|filter[AOC]=True|filter[Region]=True|filter[wine_type]=True|>
-
-
 """
