@@ -2,16 +2,21 @@ import pandas as pd
 import geopandas as gpd
 
 
-def add_basic_stats(df_wine):
-    """_summary_
+def add_basic_stats(df_wine: pd.DataFrame) -> pd.DataFrame:
+    """Add basic statistics to a DataFrame containing wine production data.
+
+    This function calculates the minimum, maximum, and average wine production values for each row
+    in the input DataFrame based on yearly data. The resulting DataFrame includes three additional
+    columns: 'min', 'max', and 'average'.
 
     Args:
-        df_wine (DataFrame): Wine production for several French Wine Regions
+        df_wine (pd.DataFrame): A DataFrame containing wine production data for various French wine regions.
 
     Returns:
-        df_wine_with_stats: The same DataFrame with 3 extra columns: Average, Min and Max
+        df_wine_with_stats (pd.DataFrame): A new DataFrame with additional columns ('min', 'max', 'average') representing
+                   the calculated statistics for each row.
     """
-    df_wine_with_stats = df_wine.reset_index(drop=True)
+    df_wine_with_stats = df_wine.copy()
     df_wine_years = df_wine_with_stats[
         [
             "08/09",
@@ -32,7 +37,7 @@ def add_basic_stats(df_wine):
     df_wine_with_stats["max"] = df_wine_years.max(axis=1)
     df_wine_with_stats["average"] = round(df_wine_years.mean(axis=1), 2)
 
-    # This is not for the stats, but this format is better for thje column name (used to display in dasboard)
+    # Rename the "wine_basin" column for better readability in the dashboard
     df_wine_with_stats = df_wine_with_stats.rename(columns={"wine_basin": "Region"})
     return df_wine_with_stats
 
