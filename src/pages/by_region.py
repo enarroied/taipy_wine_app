@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Any, Tuple
 
 import pandas as pd
 from taipy.core.config import Config
