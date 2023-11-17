@@ -1,7 +1,5 @@
 from typing import Any
 
-from taipy.core.config import Config
-
 from config.config import df_wine_production, df_wine_with_geometry
 
 # This is so by_region can use it functions (better way??):

@@ -1,9 +1,8 @@
 from typing import Any, Tuple
 
 import pandas as pd
-from taipy.core.config import Config
 
-from config.config import df_wine_production, df_wine_with_geometry
+from config.config import df_wine_with_geometry
 
 list_of_regions = df_wine_with_geometry["Region"].unique().tolist()
 selected_region = "SUD-OUEST"
