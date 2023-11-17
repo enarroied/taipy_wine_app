@@ -65,7 +65,25 @@ def get_df_map_color(
     return df_map_color
 
 
-def get_df_wine_year_and_area(year, area_type):
+def get_df_wine_year_and_area(
+    year: str, area_type: str, df_wine_production: pd.DataFrame = df_wine_production
+) -> pd.DataFrame:
+    """Create a DataFrame for wine production based on a specific year and area type.
+
+    This function takes a specific year and area type, and extracts relevant information
+    from the original wine production DataFrame (`df_wine_production`). It creates a DataFrame
+    suitable for displaying wine production data for a specified year and area type.
+
+    Args:
+        year (str): The selected year for wine production data.
+        area_type (str): The selected area type (e.g., 'AOC', 'Region').
+        df_wine_production (pd.DataFrame, optional): DataFrame containing wine production data.
+                                                      Defaults to the global variable `df_wine_production`.
+
+    Returns:
+        df_wine_year (pd.DataFrame): A DataFrame with information for displaying wine production data.
+    """
+
     df_wine_year = df_wine_production[[area_type, "wine_type"]].copy()
 
     df_wine_year["Production"] = df_wine_production[year] / 10
@@ -104,7 +122,20 @@ white_production = df_wine_year[df_wine_year["wine_type"] == "WHITE"][
 ].sum()
 
 
-def on_change(state):
+def on_change(state: Any) -> None:
+    """Update state based on a change in selected year and area type.
+
+    This function takes the current state (`state`) and updates relevant attributes based on a
+    change in the selected year and area type. It calculates total production, production for red
+    and white wines, and updates map DataFrames for red and white wines.
+
+    Args:
+        state (Any): The current state object.
+
+    Returns:
+        None
+    """
+
     print("Chosen year: ", state.selected_year)
     print("Choose region type: ", state.selected_area)
     state.df_wine_year = get_df_wine_year_and_area(
