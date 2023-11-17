@@ -6,7 +6,19 @@ list_of_regions = df_wine_with_geometry["Region"].unique().tolist()
 selected_region = "SUD-OUEST"
 
 
-def clean_df_region_color(df_region_color):
+def clean_df_region_color(df_region_color: pd.DataFrame) -> pd.DataFrame:
+    """Clean and transform a DataFrame containing region color information.
+
+    This function takes a DataFrame (`df_region_color`) containing color information for a specific
+    wine region. It performs cleaning operations, including dropping unnecessary columns and
+    transposing the DataFrame for better representation.
+
+    Args:
+        df_region_color (pd.DataFrame): DataFrame containing color information for a specific wine region.
+
+    Returns:
+        pd.DataFrame: A cleaned and transformed DataFrame with columns 'Harvest' and 'years'.
+    """
     df_region_color_clean = df_region_color.drop(
         ["Region", "wine_type", "average", "latitude", "longitude"], axis=1
     )
