@@ -1,6 +1,7 @@
 from taipy.core.config import Config
 import pandas as pd
 from config.config import df_wine_production, df_wine_with_geometry
+from typing import Tuple
 
 list_of_regions = df_wine_with_geometry["Region"].unique().tolist()
 selected_region = "SUD-OUEST"
@@ -32,7 +33,20 @@ def clean_df_region_color(df_region_color: pd.DataFrame) -> pd.DataFrame:
     return df_region_color_clean
 
 
-def create_df_region(selected_region):
+def create_df_region(selected_region: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """Create DataFrames for red and white wine production statistics for a selected region.
+
+    This function takes a selected region (`selected_region`) and extracts relevant information
+    from the original wine production DataFrame (`df_wine_with_geometry`). It creates separate
+    DataFrames for red and white wine production, applying additional cleaning operations.
+
+    Args:
+        selected_region (str): The selected wine region.
+
+    Returns:
+        Tuple[pd.DataFrame, pd.DataFrame]: A tuple containing two DataFrames - one for red wine ('df_region_red')
+                                            and one for white wine ('df_region_white').
+    """
     df_region = df_wine_with_geometry.copy()
     df_region = df_region[df_region["Region"] == selected_region]
 
