@@ -83,9 +83,19 @@ def create_df_region(selected_region: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
 df_region_red, df_region_white = create_df_region(selected_region)
 
 
-def on_change_region(state):
+def on_change_region(state: Any) -> None:
+    """Update red and white wine DataFrames based on a change in the selected region.
+
+    This function takes the current state (`state`) and updates the red and white wine
+    DataFrames (`df_region_red` and `df_region_white`) based on a change in the selected region.
+
+    Args:
+        state (Any): The current state object.
+
+    Returns:
+        None
+    """
     state.df_region_red, state.df_region_white = create_df_region(state.selected_region)
-    pass
 
 
 plot_chart_layout = {"yaxis": {"range": [0, 600]}}
