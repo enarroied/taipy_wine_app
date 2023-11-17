@@ -1,4 +1,5 @@
 from taipy.gui import Gui
+
 from pages.all_regions import *
 from pages.by_region import by_region_md
 

@@ -1,4 +1,5 @@
 from taipy.core.config import Config
+
 from config.config import df_wine_production, df_wine_with_geometry
 
 # This is so by_region can use it functions (better way??):
@@ -173,8 +174,6 @@ options_map = {
 
 
 all_regions_md = """
-
-
 
 <|{selected_year}|selector|lov={year_list}|on_change=on_change|dropdown|label=Choose Year|>
 

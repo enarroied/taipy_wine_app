@@ -1,7 +1,9 @@
-from taipy.core.config import Config
-import pandas as pd
-from config.config import df_wine_production, df_wine_with_geometry
 from typing import Tuple
+
+import pandas as pd
+from taipy.core.config import Config
+
+from config.config import df_wine_production, df_wine_with_geometry
 
 list_of_regions = df_wine_with_geometry["Region"].unique().tolist()
 selected_region = "SUD-OUEST"
@@ -136,6 +138,4 @@ by_region_md = """
 <|{df_region_white}|chart|properties={property_plot_white}|layout={plot_chart_layout}|>
 
 |>
-
-
 """

@@ -1,5 +1,5 @@
-import pandas as pd
 import geopandas as gpd
+import pandas as pd
 
 
 def add_basic_stats(df_wine: pd.DataFrame) -> pd.DataFrame:
