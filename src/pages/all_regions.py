@@ -146,7 +146,8 @@ layout_map_red = {
     "title": "Production of red wines, per Region - Million Liters",
     "dragmode": "zoom",
     "mapbox": {
-        "style": "stamen-toner",
+        # "style": "stamen-toner",
+        "style": "open-street-map",
         "center": {"lat": 46, "lon": 1.9},
         "zoom": 5,
     },
@@ -156,7 +157,8 @@ layout_map_white = {
     "title": "Production of white wines, per Region - Million Liters",
     "dragmode": "zoom",
     "mapbox": {
-        "style": "stamen-toner",
+        # "style": "stamen-toner",
+        "style": "open-street-map",
         "center": {"lat": 46, "lon": 1.9},
         "zoom": 5,
     },
@@ -197,7 +199,6 @@ all_regions_md = """
 \n
 ###<|{f'{int(white_production / 10) } Million Liters'}|>
 |>
-
 |>
 
 

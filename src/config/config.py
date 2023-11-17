@@ -1,18 +1,17 @@
-import taipy as tp
-from taipy.core.config import Config
+import taipy.core as tp
+from taipy import Config
 
 
 # Loading of the TOML
 Config.load("config/taipy-config.toml")
-
-# Get the scenario configuration
-scenario_cfg = Config.scenarios["SCENARIO_WINE"]
-
 tp.Core().run()
 
-scenario_wine = tp.create_scenario(scenario_cfg)
-scenario_wine.submit()
+# Get the scenario configuration
+scenario_cfg = Config.scenarios["SC_WINE"]
 
 
-df_wine_production = scenario_wine.WINE_PRODUCTION_WITH_STATS.read()
-df_wine_with_geometry = scenario_wine.WINE_PRODUCTION_WITH_GEOMETRY.read()
+sc_wine = tp.create_scenario(scenario_cfg)
+sc_wine.submit()
+
+df_wine_production = sc_wine.WINE_PRODUCTION_WITH_STATS.read()
+df_wine_with_geometry = sc_wine.WINE_PRODUCTION_WITH_GEOMETRY.read()

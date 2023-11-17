@@ -2,10 +2,6 @@ import pandas as pd
 import geopandas as gpd
 
 
-def add_wine_colors():
-    pass
-
-
 def add_basic_stats(df_wine):
     """_summary_
 
@@ -41,7 +37,9 @@ def add_basic_stats(df_wine):
     return df_wine_with_stats
 
 
-def add_geometry(df_wine_with_stats, geometry):
+def add_geometry(
+    df_wine_with_stats: pd.DataFrame, geometry: pd.DataFrame
+) -> pd.DataFrame:
     """_summary_
 
     Args:
