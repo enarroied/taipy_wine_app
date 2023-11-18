@@ -62,10 +62,8 @@ def add_geometry(
             including latitude and longitude, added to the wine production data.
     """
     df_geometry = gpd.GeoDataFrame.from_features(geometry, crs=3857)
-
     # Reproject to EPSG:4326 to be able to extract Lon and Lat
     df_geometry = df_geometry.to_crs(epsg=4326)
-
     df_wine_with_geometry = df_wine_with_stats.copy()
 
     # Drop the rows that are subsets (so we don't count in aggregation)
@@ -92,6 +90,5 @@ def add_geometry(
     df_wine_with_geometry = pd.merge(
         df_wine_with_geometry, df_geometry, left_on="Region", right_on="Bassin"
     )
-
     df_wine_with_geometry = df_wine_with_geometry.drop("Bassin", axis=1)
     return df_wine_with_geometry
