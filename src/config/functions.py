@@ -13,8 +13,8 @@ def add_basic_stats(df_wine: pd.DataFrame) -> pd.DataFrame:
         df_wine (pd.DataFrame): A DataFrame containing wine production data for various French wine regions.
 
     Returns:
-        df_wine_with_stats (pd.DataFrame): A new DataFrame with additional columns ('min', 'max', 'average') representing
-                   the calculated statistics for each row.
+        df_wine_with_stats (pd.DataFrame): A new DataFrame with additional columns ('min', 'max', 'average')
+            representing the calculated statistics for each row.
     """
     df_wine_with_stats = df_wine.copy()
     df_wine_years = df_wine_with_stats[
@@ -53,13 +53,13 @@ def add_geometry(
 
     Args:
         df_wine_with_stats (pd.DataFrame): DataFrame containing wine production statistics
-                                            for various regions and wine types.
+            for various regions and wine types.
         geometry (pd.DataFrame): DataFrame with geometrical information, including the
-                                 'geometry' column containing the geographical shapes.
+            'geometry' column containing the geographical shapes.
 
     Returns:
         df_wine_with_geometry (pd.DataFrame): A new DataFrame with additional geographical information,
-                      including latitude and longitude, added to the wine production data.
+            including latitude and longitude, added to the wine production data.
     """
     df_geometry = gpd.GeoDataFrame.from_features(geometry, crs=3857)
 
