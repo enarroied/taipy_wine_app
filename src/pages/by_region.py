@@ -46,7 +46,7 @@ def create_df_region(selected_region: str) -> Tuple[pd.DataFrame, pd.DataFrame]:
 
     Returns:
         Tuple[pd.DataFrame, pd.DataFrame]: A tuple containing two DataFrames - one for red wine ('df_region_red')
-                                            and one for white wine ('df_region_white').
+        and one for white wine ('df_region_white').
     """
     df_region = df_wine_with_geometry.copy()
     df_region = df_region[df_region["Region"] == selected_region]
@@ -137,11 +137,9 @@ by_region_md = """
 
 # Charts:
 
-<|layout|columns=1 1|
-
+<|layout|columns= 1 1|
 <|{df_region_red}|chart|properties={property_plot_red}|layout={plot_chart_layout}|>
 
 <|{df_region_white}|chart|properties={property_plot_white}|layout={plot_chart_layout}|>
-
 |>
 """

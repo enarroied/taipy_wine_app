@@ -1,9 +1,8 @@
 from typing import Any
 
-from config.config import df_wine_production, df_wine_with_geometry
+import pandas as pd
 
-# This is so by_region can use it functions (better way??):
-from pages.by_region import *
+from config.config import df_wine_production, df_wine_with_geometry
 
 selected_year = "average"
 year_list = [
@@ -33,14 +32,13 @@ def get_df_map_color(
     This function takes a specific year and wine color, and extracts relevant information
     from the original wine production DataFrame (`df_wine_with_geometry`). It creates a DataFrame
     suitable for map coloring, including information about regions, latitude, longitude, production,
-    size, and text.
+    size, and text (a field to display the hover in the map).
 
     Args:
         year (str): The selected year for wine production data.
         color (str): The selected wine color (e.g., 'RED AND ROSE', 'WHITE').
         df_wine_with_geometry (pd.DataFrame, optional): DataFrame containing wine production and
-                                                         geographical information. Defaults to
-                                                         the global variable `df_wine_with_geometry`.
+        geographical information. Defaults to the global variable `df_wine_with_geometry`.
 
     Returns:
         df_map_color (pd.DataFrame): A DataFrame with information for map coloring.
@@ -78,7 +76,7 @@ def get_df_wine_year_and_area(
         year (str): The selected year for wine production data.
         area_type (str): The selected area type (e.g., 'AOC', 'Region').
         df_wine_production (pd.DataFrame, optional): DataFrame containing wine production data.
-                                                      Defaults to the global variable `df_wine_production`.
+        Defaults to the global variable `df_wine_production`.
 
     Returns:
         df_wine_year (pd.DataFrame): A DataFrame with information for displaying wine production data.
@@ -86,10 +84,9 @@ def get_df_wine_year_and_area(
 
     df_wine_year = df_wine_production[[area_type, "wine_type"]].copy()
 
+    # Production is divided by 10 to show million Liters
     df_wine_year["Production"] = df_wine_production[year] / 10
-
     df_wine_year = df_wine_year.reset_index(drop=True)
-
     df_wine_year = df_wine_year.rename(columns={area_type: "Region"})
 
     df_wine_year = df_wine_year.groupby(["Region", "wine_type"]).sum()
@@ -97,7 +94,6 @@ def get_df_wine_year_and_area(
     df_wine_year = df_wine_year.sort_values(by=["Production"])
 
     # Add a column to display a cleaner and shorter label in the bar chart
-
     df_wine_year["Wine Region"] = (
         (df_wine_year["Region"].str.replace(r"[a-zA-Z]/ ", "", regex=True))
         .str.replace(r" \(.+", "", regex=True)
@@ -108,7 +104,6 @@ def get_df_wine_year_and_area(
 
 
 df_wine_year = get_df_wine_year_and_area(selected_year, selected_area)
-
 df_map_red = get_df_map_color(selected_year, "RED AND ROSE")
 df_map_white = get_df_map_color(selected_year, "WHITE")
 

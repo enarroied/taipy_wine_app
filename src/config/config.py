@@ -8,7 +8,6 @@ tp.Core().run()
 # Get the scenario configuration
 scenario_cfg = Config.scenarios["SC_WINE"]
 
-
 sc_wine = tp.create_scenario(scenario_cfg)
 sc_wine.submit()
 

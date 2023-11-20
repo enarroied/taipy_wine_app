@@ -1,7 +1,7 @@
 from taipy.gui import Gui
 
 from pages.all_regions import *
-from pages.by_region import by_region_md
+from pages.by_region import *
 
 # Toggle theme: switch dark/light mode
 root_md = """
