@@ -8,6 +8,8 @@
 
 Welcome to the **TAIPY Wine Dashboard**, a demonstration project showcasing some capabilities of [Taipy](https://docs.taipy.io), a Python library for building interactive applications. 
 
+📚 You can find more information on how to use build Taipy apps like this one in [the Medium article I wrote about it.](https://medium.com/gitconnected/create-a-dashboard-app-with-taipy-bc3b1fcfb3b0) 📚
+
 This dashboard allows you to explore wine production data for various French wine regions, providing insights into production statistics, geographical distribution, and more. Building Business Intelligence (BI) dashboards.
 
 ![Gif showing the Wine Dashboard app](/images/wine_app.gif)
