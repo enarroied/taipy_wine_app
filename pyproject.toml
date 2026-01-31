@@ -1,0 +1,15 @@
+[project]
+name = "taipy-wine-app"
+version = "0.1.0"
+description = "A Taipy dashboard application showing wine production data."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "geopandas>=1.1.2",
+    "taipy>=4.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.14",
+]
