@@ -3,41 +3,6 @@ from typing import Any
 from algorithms import get_df_map_color, get_df_wine_year_and_area
 from config.config import df_wine_production, df_wine_with_geometry
 
-selected_year = "average"
-year_list = [
-    "average",
-    "08/09",
-    "09/10",
-    "10/11",
-    "11/12",
-    "12/13",
-    "13/14",
-    "14/15",
-    "15/16",
-    "16/17",
-    "17/18",
-    "18/19",
-]
-
-area_type_list = ["AOC", "Region"]
-selected_area = area_type_list[0]
-
-
-df_wine_year = get_df_wine_year_and_area(
-    selected_year, selected_area, df_wine_production
-)
-df_map_red = get_df_map_color(selected_year, "RED AND ROSE", df_wine_with_geometry)
-df_map_white = get_df_map_color(selected_year, "WHITE", df_wine_with_geometry)
-
-# Variables for the labels:
-total_production = df_wine_year["Production"].sum()
-red_rose_production = df_wine_year[df_wine_year["wine_type"] == "RED AND ROSE"][
-    "Production"
-].sum()
-white_production = df_wine_year[df_wine_year["wine_type"] == "WHITE"][
-    "Production"
-].sum()
-
 
 def on_change(state: Any) -> None:
     """Update state based on a change in selected year and area type.
@@ -61,11 +26,11 @@ def on_change(state: Any) -> None:
     # Update the labels:
     state.total_production = state.df_wine_year["Production"].sum()
     state.red_rose_production = state.df_wine_year[
-        df_wine_year["wine_type"] == "RED AND ROSE"
+        state.df_wine_year["wine_type"] == "RED AND ROSE"
     ]["Production"].sum()
-    state.white_production = state.df_wine_year[df_wine_year["wine_type"] == "WHITE"][
-        "Production"
-    ].sum()
+    state.white_production = state.df_wine_year[
+        state.df_wine_year["wine_type"] == "WHITE"
+    ]["Production"].sum()
 
     # Update map dataframes:
     state.df_map_red = get_df_map_color(

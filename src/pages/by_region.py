@@ -3,13 +3,6 @@ from typing import Any
 from algorithms import create_df_region
 from config.config import df_wine_with_geometry
 
-list_of_regions = df_wine_with_geometry["Region"].unique().tolist()
-selected_region = "SUD-OUEST"
-
-df_region_red, df_region_white = create_df_region(
-    df_wine_with_geometry, selected_region
-)
-
 
 def on_change_region(state: Any) -> None:
     """Update red and white wine DataFrames based on a change in the selected region.
