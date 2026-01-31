@@ -17,28 +17,27 @@ def on_change(state: Any) -> None:
     Returns:
         None
     """
+    with state as s:
+        df_wine_year = get_df_wine_year_and_area(
+            s.selected_year, s.selected_area, df_wine_production
+        )
+        s.df_wine_year = df_wine_year.copy()
+        # Update the labels:
+        s.total_production = df_wine_year["Production"].sum()
+        s.red_rose_production = df_wine_year[
+            df_wine_year["wine_type"] == "RED AND ROSE"
+        ]["Production"].sum()
+        s.white_production = df_wine_year[df_wine_year["wine_type"] == "WHITE"][
+            "Production"
+        ].sum()
 
-    print("Chosen year: ", state.selected_year)
-    print("Choose region type: ", state.selected_area)
-    state.df_wine_year = get_df_wine_year_and_area(
-        state.selected_year, state.selected_area, df_wine_production
-    )
-    # Update the labels:
-    state.total_production = state.df_wine_year["Production"].sum()
-    state.red_rose_production = state.df_wine_year[
-        state.df_wine_year["wine_type"] == "RED AND ROSE"
-    ]["Production"].sum()
-    state.white_production = state.df_wine_year[
-        state.df_wine_year["wine_type"] == "WHITE"
-    ]["Production"].sum()
-
-    # Update map dataframes:
-    state.df_map_red = get_df_map_color(
-        state.selected_year, "RED AND ROSE", df_wine_with_geometry
-    )
-    state.df_map_white = get_df_map_color(
-        state.selected_year, "WHITE", df_wine_with_geometry
-    )
+        # Update map dataframes:
+        s.df_map_red = get_df_map_color(
+            s.selected_year, "RED AND ROSE", df_wine_with_geometry
+        )
+        s.df_map_white = get_df_map_color(
+            s.selected_year, "WHITE", df_wine_with_geometry
+        )
 
 
 ##############################################################################################################

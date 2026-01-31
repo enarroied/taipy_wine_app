@@ -36,7 +36,6 @@ def get_df_map_color(
         df_map_color["Region"] + ": " + df_map_color["Production"].astype(str) + " Ml"
     )
 
-    print(df_map_color.head())
     return df_map_color
 
 
