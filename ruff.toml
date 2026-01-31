@@ -1,0 +1,13 @@
+target-version = "py312"
+line-length = 88
+
+[lint]
+extend-select = [
+    "E",    # pycodestyle (PEP 8 errors)
+    "F",    # pyflakes
+    "N",    # pep8-naming
+    "PD",   # pandas-vet
+    "PTH",  # pathlib rules
+    "E501", #Line length
+    "I"     #isort
+]
