@@ -1,43 +1,9 @@
-from typing import Any
-
-from algorithms import get_df_map_color, get_df_wine_year_and_area
-from config.config import df_wine_production, df_wine_with_geometry
+from callbacks import on_change_all_regions
 
 
-def on_change(state: Any) -> None:
-    """Update state based on a change in selected year and area type.
-
-    This function takes the current state (`state`) and updates relevant attributes based on a
-    change in the selected year and area type. It calculates total production, production for red
-    and white wines, and updates map DataFrames for red and white wines.
-
-    Args:
-        state (Any): The current state object.
-
-    Returns:
-        None
-    """
-    with state as s:
-        df_wine_year = get_df_wine_year_and_area(
-            s.selected_year, s.selected_area, df_wine_production
-        )
-        s.df_wine_year = df_wine_year.copy()
-        # Update the labels:
-        s.total_production = df_wine_year["Production"].sum()
-        s.red_rose_production = df_wine_year[
-            df_wine_year["wine_type"] == "RED AND ROSE"
-        ]["Production"].sum()
-        s.white_production = df_wine_year[df_wine_year["wine_type"] == "WHITE"][
-            "Production"
-        ].sum()
-
-        # Update map dataframes:
-        s.df_map_red = get_df_map_color(
-            s.selected_year, "RED AND ROSE", df_wine_with_geometry
-        )
-        s.df_map_white = get_df_map_color(
-            s.selected_year, "WHITE", df_wine_with_geometry
-        )
+def overpass_ruff():
+    on_change_all_regions()
+    pass
 
 
 ##############################################################################################################
@@ -116,7 +82,7 @@ options_map = {
 
 all_regions_md = """
 
-<|{selected_year}|selector|lov={year_list}|on_change=on_change|dropdown|label=Choose Year|>
+<|{selected_year}|selector|lov={year_list}|on_change=on_change_all_regions|dropdown|label=Choose Year|>
 
 # AOC Wine production | **<|{selected_year}|text|raw|> Campaign**{: .color-primary} | All Regions
 
@@ -142,7 +108,7 @@ all_regions_md = """
 
 ## Production **by <|{selected_area}|text|raw|>**{: .color-primary}
 
-<|{selected_area}|toggle|lov={area_type_list}|on_change=on_change|>
+<|{selected_area}|toggle|lov={area_type_list}|on_change=on_change_all_regions|>
 
 <|layout|columns=1 1|
 <|{df_wine_year[df_wine_year["wine_type"] == "RED AND ROSE"]}|chart|properties={property_barchart_red_rose}|layout={bar_chart_layout}|height=800px|>

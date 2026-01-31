@@ -1,6 +1,7 @@
 from taipy.gui import Gui
 
-from config.config import df_wine_with_geometry
+from algorithms import create_df_region, get_df_map_color, get_df_wine_year_and_area
+from config.config import df_wine_production, df_wine_with_geometry
 from pages.all_regions import *
 from pages.by_region import *
 

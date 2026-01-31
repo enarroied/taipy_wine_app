@@ -1,0 +1,2 @@
+from .on_change_all_regions import on_change_all_regions as on_change_all_regions
+from .on_change_region import on_change_region as on_change_region
