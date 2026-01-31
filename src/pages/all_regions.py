@@ -173,7 +173,7 @@ property_barchart_white = {
     "x": "Wine Region",
     "y[1]": "Production",
     "color[1]": "#E0C095",
-    "title": f"Production of White wines by Region (Million Liters)",
+    "title": "Production of White wines by Region (Million Liters)",
 }
 
 ##############################################################################################################

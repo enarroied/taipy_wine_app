@@ -1,5 +1,6 @@
 from taipy.gui import Gui
 
+from config.config import df_wine_with_geometry
 from pages.all_regions import *
 from pages.by_region import *
 
