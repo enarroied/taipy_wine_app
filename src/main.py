@@ -2,28 +2,19 @@ from taipy.gui import Gui
 
 from algorithms import create_df_region, get_df_map_color, get_df_wine_year_and_area
 from config.config import df_wine_production, df_wine_with_geometry
-from pages.all_regions import *
-from pages.by_region import *
+from pages import all_regions_page, by_region_page, root_page
 
-# Toggle theme: switch dark/light mode
-root_md = """
-<|toggle|theme|>
-<center>\n<|navbar|>\n</center>
-"""
+pages = {"/": root_page, "all_regions": all_regions_page, "by_region": by_region_page}
 
-stylekit = {
-    "color-primary": "#CC3333",
-    "color-secondary": "#E0C095",
-    "color-background-light": "#F7E7CE",
-    "color-background-dark": "#E0C095",
-}
-
-pages = {"/": root_md, "all_regions": all_regions_md, "by_region": by_region_md}
-
-
-gui_multi_pages = Gui(pages=pages)
+gui_multi_pages = Gui(pages=pages, css_file="./css/main.css")
 
 if __name__ == "__main__":
+    stylekit = {
+        "color-primary": "#CC3333",
+        "color-secondary": "#E0C095",
+        "color-background-light": "#F7E7CE",
+        "color-background-dark": "#E0C095",
+    }
     # Variables for all_regions page
     selected_year = "average"
     year_list = [
@@ -67,9 +58,97 @@ if __name__ == "__main__":
         df_wine_with_geometry, selected_region
     )
 
+    ##############################################################################################################
+    ##                                      Chart properties:                                                   ##
+    ##############################################################################################################
+
+    bar_chart_layout = {
+        "yaxis": {"range": [0, 600]},
+        "xaxis": {"automargin": True},
+        "xlabel": "None",
+    }
+
+    property_barchart_red_rose = {
+        "type": "bar",
+        "x": "Wine Region",
+        "y[1]": "Production",
+        "color[1]": "#900020",
+        "title": "Production of Red wines by Region (Million Liters)",
+    }
+
+    property_barchart_white = {
+        "type": "bar",
+        "x": "Wine Region",
+        "y[1]": "Production",
+        "color[1]": "#E0C095",
+        "title": "Production of White wines by Region (Million Liters)",
+    }
+
+    plot_chart_layout = {"yaxis": {"range": [0, 600]}}
+
+    property_plot_white = {
+        "type": "scatter",
+        "mode": "lines",
+        "x": "years",
+        "y": "Harvest",
+        "color": "#E0C095",
+        "title": "Production of White wines (Million Liters)",
+    }
+
+    property_plot_red = {
+        "type": "scatter",
+        "mode": "lines",
+        "x": "years",
+        "y": "Harvest",
+        "color": "#900020",
+        "title": "Production of Red wines (Million Liters)",
+    }
+    ##############################################################################################################
+    ##                                      For the map:                                                        ##
+    ##############################################################################################################
+    marker_map_white = {
+        "color": "Production",
+        "size": "size",
+        "showscale": True,
+        "colorscale": "Viridis",  # No better colormap found
+    }
+
+    marker_map_red = {
+        "color": "Production",
+        "size": "size",
+        "showscale": True,
+        "colorscale": "RdBu",
+    }
+
+    layout_map_red = {
+        "title": "Production of red wines, per Region - Million Liters",
+        "dragmode": "zoom",
+        "mapbox": {
+            # "style": "stamen-toner",
+            "style": "open-street-map",
+            "center": {"lat": 46, "lon": 1.9},
+            "zoom": 5,
+        },
+    }
+
+    layout_map_white = {
+        "title": "Production of white wines, per Region - Million Liters",
+        "dragmode": "zoom",
+        "mapbox": {
+            # "style": "stamen-toner",
+            "style": "open-street-map",
+            "center": {"lat": 46, "lon": 1.9},
+            "zoom": 5,
+        },
+    }
+
+    options_map = {
+        "unselected": {"marker": {"opacity": 0.8}},
+        "hovertemplate": "<b>%{text}</b>" + "<extra></extra>",
+    }
+
     gui_multi_pages.run(
         use_reloader=True,
         title="Wine 🍷 production by Region and Year",
         dark_mode=False,
-        stylekit=stylekit,
     )

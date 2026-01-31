@@ -17,6 +17,6 @@ def on_change_region(state: State) -> None:
         None
     """
     with state as s:
-        state.df_region_red, state.df_region_white = create_df_region(
-            df_wine_with_geometry, state.selected_region
+        s.df_region_red, s.df_region_white = create_df_region(
+            df_wine_with_geometry, s.selected_region
         )
