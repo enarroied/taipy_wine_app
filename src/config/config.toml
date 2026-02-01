@@ -1,5 +1,10 @@
 [TAIPY]
 
+[DATA_NODE.year_list]
+storage_type = "generic"
+read_fct = "config.read_yaml_list.read_yaml_list:function"
+read_fct_args = [ "data/dataset_years.yaml",]
+
 [DATA_NODE.wine_production]
 storage_type = "csv"
 default_path = "data/wine_harvest_france_aoc_09_19.csv"
@@ -14,13 +19,13 @@ default_path = "data/french_wine_bassin_centroids.geojson"
 
 [TASK.add_wine_stats]
 function = "algorithms.transform_dataset.add_basic_stats:function"
-inputs = [ "wine_production:SECTION",]
+inputs = [ "wine_production:SECTION", "year_list:SECTION",]
 outputs = [ "wine_production_with_stats:SECTION",]
 skippable = "False:bool"
 
 [TASK.add_geometry]
 function = "algorithms.transform_dataset.add_geometry:function"
-inputs = [ "wine_production_with_stats:SECTION", "geometry:SECTION",]
+inputs = [ "wine_production_with_stats:SECTION", "geometry:SECTION", "year_list:SECTION",]
 outputs = [ "wine_production_with_geometry:SECTION",]
 skippable = "False:bool"
 

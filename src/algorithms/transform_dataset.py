@@ -1,8 +1,10 @@
+from typing import List
+
 import geopandas as gpd
 import pandas as pd
 
 
-def add_basic_stats(df_wine: pd.DataFrame) -> pd.DataFrame:
+def add_basic_stats(df_wine: pd.DataFrame, year_cols: List) -> pd.DataFrame:
     """Add basic statistics to a DataFrame containing wine production data.
 
     This function calculates the minimum, maximum, and average wine production values
@@ -18,21 +20,7 @@ def add_basic_stats(df_wine: pd.DataFrame) -> pd.DataFrame:
          ('min', 'max', 'average') representing the calculated statistics for each row.
     """
     df_wine_with_stats = df_wine.copy()
-    df_wine_years = df_wine_with_stats[
-        [
-            "08/09",
-            "09/10",
-            "10/11",
-            "11/12",
-            "12/13",
-            "13/14",
-            "14/15",
-            "15/16",
-            "16/17",
-            "17/18",
-            "18/19",
-        ]
-    ]
+    df_wine_years = df_wine_with_stats[year_cols]
 
     df_wine_with_stats["min"] = df_wine_years.min(axis=1)
     df_wine_with_stats["max"] = df_wine_years.max(axis=1)
@@ -44,7 +32,7 @@ def add_basic_stats(df_wine: pd.DataFrame) -> pd.DataFrame:
 
 
 def add_geometry(
-    df_wine_with_stats: pd.DataFrame, geometry: pd.DataFrame
+    df_wine_with_stats: pd.DataFrame, geometry: pd.DataFrame, year_cols: List
 ) -> pd.DataFrame:
     """Add geographical information to DataFrame containing wine production statistics.
 
@@ -75,10 +63,15 @@ def add_geometry(
     df_wine_with_geometry = df_wine_with_geometry.reset_index(drop=True)
 
     # Drop the "AOC" column, as well as "min" and "max"
-    df_wine_with_geometry = df_wine_with_geometry.drop(["AOC", "min", "max"], axis=1)
+    df_wine_with_geometry = df_wine_with_geometry.drop(
+        ["AOC", "min", "max", "average"], axis=1
+    )
 
     df_wine_with_geometry = df_wine_with_geometry.groupby(["Region", "wine_type"]).sum()
     df_wine_with_geometry = df_wine_with_geometry.reset_index()
+    df_wine_with_geometry["average"] = round(
+        df_wine_with_geometry[year_cols].mean(axis=1), 2
+    )
     df_wine_with_geometry = df_wine_with_geometry.sort_values(
         by=["average"], ascending=False
     ).reset_index(drop=True)
