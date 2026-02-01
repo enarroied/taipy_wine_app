@@ -1,15 +1,43 @@
-import taipy.core as tp
 from taipy import Config
 
-# Loading of the TOML
-Config.load("config/taipy-config.toml")
-tp.Core().run()
+from algorithms import add_basic_stats, add_geometry
 
-# Get the scenario configuration
-scenario_cfg = Config.scenarios["SC_WINE"]
+# Data nodes:
+wine_production_node_config = Config.configure_csv_data_node(
+    id="wine_production",
+    default_path="data/wine_harvest_france_aoc_09_19.csv",
+)
+wine_production_with_stats_node_config = Config.configure_data_node(
+    id="wine_production_with_stats",
+)
+geometry_node_config = Config.configure_json_data_node(
+    id="geometry",
+    default_path="data/french_wine_bassin_centroids.geojson",
+)
+wine_production_with_geometry_node_config = Config.configure_data_node(
+    id="wine_production_with_geometry",
+)
 
-sc_wine = tp.create_scenario(scenario_cfg)
-sc_wine.submit()
+# Tasks:
+add_wine_stats_task = Config.configure_task(
+    id="add_wine_stats",
+    function=add_basic_stats,
+    input=wine_production_node_config,
+    output=wine_production_with_stats_node_config,
+    skippable=False,
+)
+add_geometry_task = Config.configure_task(
+    id="add_geometry",
+    function=add_geometry,
+    input=[wine_production_with_stats_node_config, geometry_node_config],
+    output=wine_production_with_geometry_node_config,
+    skippable=False,
+)
 
-df_wine_production = sc_wine.WINE_PRODUCTION_WITH_STATS.read()
-df_wine_with_geometry = sc_wine.WINE_PRODUCTION_WITH_GEOMETRY.read()
+# Scenario:
+sc_wine_scenario = Config.configure_scenario(
+    id="sc_wine",
+    task_configs=[add_wine_stats_task, add_geometry_task],
+)
+
+Config.export("./config/config.toml")

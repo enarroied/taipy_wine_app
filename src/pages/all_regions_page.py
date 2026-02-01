@@ -2,12 +2,6 @@ import taipy.gui.builder as tgb
 
 from callbacks import on_change_all_regions
 
-
-def overpass_ruff():
-    on_change_all_regions()
-    pass
-
-
 with tgb.Page() as all_regions_page:
     tgb.text(
         "# AOC Wine production | **{selected_year}** Campaign | All Regions", mode="md"

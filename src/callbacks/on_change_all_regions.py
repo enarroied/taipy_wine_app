@@ -1,7 +1,6 @@
 from taipy.gui import State
 
 from algorithms import get_df_map_color, get_df_wine_year_and_area
-from config.config import df_wine_production, df_wine_with_geometry
 
 
 def on_change_all_regions(state: State) -> None:
@@ -19,7 +18,7 @@ def on_change_all_regions(state: State) -> None:
     """
     with state as s:
         df_wine_year = get_df_wine_year_and_area(
-            s.selected_year, s.selected_area, df_wine_production
+            s.selected_year, s.selected_area, s.df_wine_production
         )
         s.df_wine_year = df_wine_year.copy()
         # Update the labels:
@@ -33,8 +32,8 @@ def on_change_all_regions(state: State) -> None:
 
         # Update map dataframes:
         s.df_map_red = get_df_map_color(
-            s.selected_year, "RED AND ROSE", df_wine_with_geometry
+            s.selected_year, "RED AND ROSE", s.df_wine_with_geometry
         )
         s.df_map_white = get_df_map_color(
-            s.selected_year, "WHITE", df_wine_with_geometry
+            s.selected_year, "WHITE", s.df_wine_with_geometry
         )

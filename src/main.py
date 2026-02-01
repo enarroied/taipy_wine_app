@@ -1,7 +1,9 @@
+import taipy as tp
+from taipy import Orchestrator
 from taipy.gui import Gui
 
 from algorithms import create_df_region, get_df_map_color, get_df_wine_year_and_area
-from config.config import df_wine_production, df_wine_with_geometry
+from config.config import sc_wine_scenario
 from pages import all_regions_page, by_region_page, root_page
 
 pages = {"/": root_page, "all_regions": all_regions_page, "by_region": by_region_page}
@@ -9,12 +11,13 @@ pages = {"/": root_page, "all_regions": all_regions_page, "by_region": by_region
 gui_multi_pages = Gui(pages=pages, css_file="./css/main.css")
 
 if __name__ == "__main__":
-    stylekit = {
-        "color-primary": "#CC3333",
-        "color-secondary": "#E0C095",
-        "color-background-light": "#F7E7CE",
-        "color-background-dark": "#E0C095",
-    }
+    Orchestrator().run()
+    sc_wine = tp.create_scenario(sc_wine_scenario)
+    sc_wine.submit()
+
+    df_wine_production = sc_wine.wine_production_with_stats.read()
+    df_wine_with_geometry = sc_wine.wine_production_with_geometry.read()
+
     # Variables for all_regions page
     selected_year = "average"
     year_list = [
