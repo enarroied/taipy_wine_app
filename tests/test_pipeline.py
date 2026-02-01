@@ -211,7 +211,8 @@ class TestAddBasicStats:
     # --- year_cols parameter actually controls which columns are used ---
 
     def test_subset_of_year_cols(self):
-        """Passing only a subset of year columns should compute stats over that subset only."""
+        """Passing only a subset of year columns should compute stats over that subset
+        only."""
         row = {
             "wine_basin": "Sub",
             "AOC": "S",

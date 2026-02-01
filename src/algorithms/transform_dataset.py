@@ -81,8 +81,8 @@ def add_geometry(
     df_geometry["longitude"] = df_geometry["geometry"].x
     df_geometry = df_geometry.drop("geometry", axis=1)
 
-    df_wine_with_geometry = pd.merge(
-        df_wine_with_geometry, df_geometry, left_on="Region", right_on="Bassin"
+    df_wine_with_geometry = df_wine_with_geometry.merge(
+        df_geometry, left_on="Region", right_on="Bassin"
     )
     df_wine_with_geometry = df_wine_with_geometry.drop("Bassin", axis=1)
     return df_wine_with_geometry
