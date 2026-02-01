@@ -50,7 +50,7 @@ You can download the CSV data from [Kaggle](https://www.kaggle.com/datasets/eric
 
 The centroids [come from another file](https://www.kaggle.com/datasets/ericnarro/french-wine-aop-regions) that I also listed on Kaggle, and that file comes from [official data from the French Government](https://www.data.gouv.fr/fr/datasets/cartes-des-grandes-regions-productrices-de-vins-aop-en-france/#/community-reuses). [This notebook shows how I created the centroids](https://www.kaggle.com/code/ericnarro/create-centroid-points-from-a-layer-of-polygons).
 
-## Running Taipy Tools
+## Running Taipy Wine App
 
 You can run this application either **locally** or inside a **Docker container**.
 
