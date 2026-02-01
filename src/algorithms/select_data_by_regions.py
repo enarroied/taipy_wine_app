@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import List, Tuple
 
 import pandas as pd
 
@@ -32,7 +32,7 @@ def clean_df_region_color(df_region_color: pd.DataFrame) -> pd.DataFrame:
 
 
 def create_df_region(
-    df_wine_with_geometry: pd.DataFrame, selected_region: str
+    df_wine_with_geometry: pd.DataFrame, selected_region: str, year_cols: List
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Create DataFrames for red and white wine production statistics
         for a selected region.
@@ -62,19 +62,8 @@ def create_df_region(
     else:
         df_region_red = pd.DataFrame.from_dict(
             {
-                "Harvest": [0] * 10,
-                "years": [
-                    "08/09",
-                    "09/10",
-                    "10/11",
-                    "11/12",
-                    "12/13",
-                    "13/14",
-                    "14/15",
-                    "15/16",
-                    "17/18",
-                    "18/19",
-                ],
+                "Harvest": [0] * len(year_cols),
+                "years": year_cols,
             }
         )
     df_region_white = clean_df_region_color(df_region_white)

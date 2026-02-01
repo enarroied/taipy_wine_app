@@ -20,7 +20,8 @@ if __name__ == "__main__":
 
     # Variables for all_regions page
     selected_year = "average"
-    year_list = [selected_year] + sc_wine.year_list.read()
+    year_list = sc_wine.year_list.read()
+    year_list_for_selector = [selected_year] + year_list
 
     area_type_list = ["AOC", "Region"]
     selected_area = area_type_list[0]
@@ -45,7 +46,7 @@ if __name__ == "__main__":
     selected_region = "SUD-OUEST"
 
     df_region_red, df_region_white = create_df_region(
-        df_wine_with_geometry, selected_region
+        df_wine_with_geometry, selected_region, year_list
     )
 
     # Chart properties:

@@ -8,7 +8,7 @@ with tgb.Page() as all_regions_page:
     )
     tgb.selector(
         "{selected_year}",
-        lov="{year_list}",
+        lov="{year_list_for_selector}",
         on_change=on_change_all_regions,
         dropdown=True,
         label="Choose Year",
