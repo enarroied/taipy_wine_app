@@ -6,15 +6,17 @@ import pandas as pd
 def clean_df_region_color(df_region_color: pd.DataFrame) -> pd.DataFrame:
     """Clean and transform a DataFrame containing region color information.
 
-    This function takes a DataFrame (`df_region_color`) containing color information for a specific
-    wine region. It performs cleaning operations, including dropping unnecessary columns and
-    transposing the DataFrame for better representation.
+    This function takes a DataFrame (`df_region_color`) with color information for a
+        specific wine region. It performs cleaning operations, including dropping
+        unnecessary columns and transposing the DataFrame for better representation.
 
     Args:
-        df_region_color (pd.DataFrame): DataFrame containing color information for a specific wine region.
+        df_region_color (pd.DataFrame): DataFrame with color information
+            for specific region.
 
     Returns:
-        pd.DataFrame: A cleaned and transformed DataFrame with columns 'Harvest' and 'years'.
+        pd.DataFrame: Cleaned and transformed DataFrame with columns 'Harvest'
+            and 'years'.
     """
     df_region_color_clean = df_region_color.drop(
         ["Region", "wine_type", "average", "latitude", "longitude"], axis=1
@@ -32,18 +34,19 @@ def clean_df_region_color(df_region_color: pd.DataFrame) -> pd.DataFrame:
 def create_df_region(
     df_wine_with_geometry: pd.DataFrame, selected_region: str
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    """Create DataFrames for red and white wine production statistics for a selected region.
+    """Create DataFrames for red and white wine production statistics
+        for a selected region.
 
-    This function takes a selected region (`selected_region`) and extracts relevant information
-    from the original wine production DataFrame (`df_wine_with_geometry`). It creates separate
-    DataFrames for red and white wine production, applying additional cleaning operations.
+    Takes a selected region (`selected_region`) and extracts relevant information from
+        the original wine production DataFrame (`df_wine_with_geometry`). It creates
+        separate DataFrames for red and white wine production.
 
     Args:
         selected_region (str): The selected wine region.
 
     Returns:
-        Tuple[pd.DataFrame, pd.DataFrame]: A tuple containing two DataFrames - one for red wine ('df_region_red')
-        and one for white wine ('df_region_white').
+        Tuple[pd.DataFrame, pd.DataFrame]: A tuple containing two DataFrames: one for
+            red wine ('df_region_red') and one for white wine ('df_region_white').
     """
     df_region = df_wine_with_geometry.copy()
     df_region = df_region[df_region["Region"] == selected_region]

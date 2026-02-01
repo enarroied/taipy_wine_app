@@ -5,16 +5,17 @@ import pandas as pd
 def add_basic_stats(df_wine: pd.DataFrame) -> pd.DataFrame:
     """Add basic statistics to a DataFrame containing wine production data.
 
-    This function calculates the minimum, maximum, and average wine production values for each row
-    in the input DataFrame based on yearly data. The resulting DataFrame includes three additional
-    columns: 'min', 'max', and 'average'.
+    This function calculates the minimum, maximum, and average wine production values
+    for each row in the input DataFrame based on yearly data. The resulting DataFrame
+    includes three additional columns: 'min', 'max', and 'average'.
 
     Args:
-        df_wine (pd.DataFrame): A DataFrame containing wine production data for various French wine regions.
+        df_wine (pd.DataFrame): A DataFrame containing wine production data for various
+         French wine regions.
 
     Returns:
-        df_wine_with_stats (pd.DataFrame): A new DataFrame with additional columns ('min', 'max', 'average')
-            representing the calculated statistics for each row.
+        df_wine_with_stats (pd.DataFrame): A new DataFrame with additional columns
+         ('min', 'max', 'average') representing the calculated statistics for each row.
     """
     df_wine_with_stats = df_wine.copy()
     df_wine_years = df_wine_with_stats[
@@ -45,21 +46,21 @@ def add_basic_stats(df_wine: pd.DataFrame) -> pd.DataFrame:
 def add_geometry(
     df_wine_with_stats: pd.DataFrame, geometry: pd.DataFrame
 ) -> pd.DataFrame:
-    """Add geographical information to a DataFrame containing wine production statistics.
+    """Add geographical information to DataFrame containing wine production statistics.
 
-    This function takes a DataFrame with wine production statistics (`df_wine_with_stats`)
-    and a DataFrame with geographical information (`geometry`). It adds geographical data to
+    Takes a DataFrame with wine production statistics (`df_wine_with_stats`) and a
+    DataFrame with geographical information (`geometry`). It adds geographical data to
     the wine production DataFrame (including latitude and longitude).
 
     Args:
-        df_wine_with_stats (pd.DataFrame): DataFrame containing wine production statistics
+        df_wine_with_stats (pd.DataFrame): DataFrame with wine production statistics
             for various regions and wine types.
         geometry (pd.DataFrame): DataFrame with geometrical information, including the
             'geometry' column containing the geographical shapes.
 
     Returns:
-        df_wine_with_geometry (pd.DataFrame): A new DataFrame with additional geographical information,
-            including latitude and longitude, added to the wine production data.
+        df_wine_with_geometry (pd.DataFrame): New DataFrame with additional geographical
+         information, including latitude and longitude, added to wine production data.
     """
     df_geometry = gpd.GeoDataFrame.from_features(geometry, crs=3857)
     # Reproject to EPSG:4326 to be able to extract Lon and Lat

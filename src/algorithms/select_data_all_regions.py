@@ -6,16 +6,17 @@ def get_df_map_color(
 ) -> pd.DataFrame:
     """Create a DataFrame for map coloring based on wine production data.
 
-    This function takes a specific year and wine color, and extracts relevant information
-    from the original wine production DataFrame (`df_wine_with_geometry`). It creates a DataFrame
-    suitable for map coloring, including information about regions, latitude, longitude, production,
-    size, and text (a field to display the hover in the map).
+    Takes a specific year and wine color, and extracts relevant information from the
+    original wine production DataFrame (`df_wine_with_geometry`). It creates a DataFrame
+    suitable for map coloring, including information about regions, latitude, longitude,
+    production, size, and text (a field to display the hover in the map).
 
     Args:
         year (str): The selected year for wine production data.
         color (str): The selected wine color (e.g., 'RED AND ROSE', 'WHITE').
-        df_wine_with_geometry (pd.DataFrame, optional): DataFrame containing wine production and
-        geographical information. Defaults to the global variable `df_wine_with_geometry`.
+        df_wine_with_geometry (pd.DataFrame, optional): DataFrame containing wine
+            production and geographical information. Defaults to the global variable
+            `df_wine_with_geometry`.
 
     Returns:
         df_map_color (pd.DataFrame): A DataFrame with information for map coloring.
@@ -30,7 +31,7 @@ def get_df_map_color(
     # Production is divided by 10 to show million Liters
     df_map_color["Production"] = df_geometry_color[year] / 10
 
-    # this is only to display and acceptable size of the dots on the map, dividing by 5 is arbitrary:
+    # to display and acceptable size of the dots on the map, dividing by 5 is arbitrary:
     df_map_color["size"] = df_map_color["Production"] / 5
     df_map_color["text"] = (
         df_map_color["Region"] + ": " + df_map_color["Production"].astype(str) + " Ml"
@@ -45,17 +46,18 @@ def get_df_wine_year_and_area(
     """Create a DataFrame for wine production based on a specific year and area type.
 
     This function takes a specific year and area type, and extracts relevant information
-    from the original wine production DataFrame (`df_wine_production`). It creates a DataFrame
-    suitable for displaying wine production data for a specified year and area type.
+        from the original wine production DataFrame (`df_wine_production`). It creates
+        a DataFrame suitable for displaying wine production data for a specified year
+        and area type.
 
     Args:
         year (str): The selected year for wine production data.
         area_type (str): The selected area type (e.g., 'AOC', 'Region').
-        df_wine_production (pd.DataFrame, optional): DataFrame containing wine production data.
-        Defaults to the global variable `df_wine_production`.
+        df_wine_production (pd.DataFrame, optional): DataFrame with wine production
+            data. Defaults to the global variable `df_wine_production`.
 
     Returns:
-        df_wine_year (pd.DataFrame): A DataFrame with information for displaying wine production data.
+        df_wine_year (pd.DataFrame): DataFrame with information about wine production.
     """
 
     df_wine_year = df_wine_production[[area_type, "wine_type"]].copy()

@@ -7,7 +7,8 @@ def on_change_region(state: State) -> None:
     """Update red and white wine DataFrames based on a change in the selected region.
 
     This function takes the current state (`state`) and updates the red and white wine
-    DataFrames (`df_region_red` and `df_region_white`) based on a change in the selected region.
+    DataFrames (`df_region_red` and `df_region_white`) based on a change in the
+        selected region.
 
     Args:
         state (Any): The current state object.

@@ -6,9 +6,10 @@ from algorithms import get_df_map_color, get_df_wine_year_and_area
 def on_change_all_regions(state: State) -> None:
     """Update state based on a change in selected year and area type.
 
-    This function takes the current state (`state`) and updates relevant attributes based on a
-    change in the selected year and area type. It calculates total production, production for red
-    and white wines, and updates map DataFrames for red and white wines.
+    This function takes the current state (`state`) and updates relevant attributes
+        based on a change in the selected year and area type. It calculates total
+        production, production for red and white wines, and updates map DataFrames
+        for red and white wines.
 
     Args:
         state (Any): The current state object.
