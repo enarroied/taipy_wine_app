@@ -56,7 +56,7 @@ def add_geometry(
     df_wine_with_geometry = df_wine_with_stats.copy()
 
     # Drop the rows that are subsets (so we don't count in aggregation)
-    rows_to_drop = df_wine_with_geometry["AOC"].str.contains("(subset)")
+    rows_to_drop = df_wine_with_geometry["AOC"].str.contains("(subset)", regex=False)
     df_wine_with_geometry = df_wine_with_geometry.drop(
         df_wine_with_geometry[rows_to_drop].index
     )

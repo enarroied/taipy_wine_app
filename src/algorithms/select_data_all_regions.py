@@ -26,7 +26,7 @@ def get_df_map_color(
         df_wine_with_geometry["wine_type"] == color
     ].copy()
 
-    df_map_color = df_geometry_color[["Region", "latitude", "longitude"]]
+    df_map_color = df_geometry_color[["Region", "latitude", "longitude"]].copy()
 
     # Production is divided by 10 to show million Liters
     df_map_color["Production"] = df_geometry_color[year] / 10
