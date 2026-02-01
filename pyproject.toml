@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "geopandas>=1.1.2",
+    "pytest-cov>=7.0.0",
     "taipy>=4.1.0",
 ]
 
