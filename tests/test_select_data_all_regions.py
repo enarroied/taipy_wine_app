@@ -282,7 +282,8 @@ class TestGetDfWineYearAndArea:
         assert row.iloc[0]["Wine Region"] == "SANCERRE"
 
     def test_label_strips_including_clause(self, production_df):
-        """'CHAMPAGNE including Côte des Blancs' → strip ' including...' → 'CHAMPAGNE'."""
+        """'CHAMPAGNE including Côte des Blancs'
+        → strip ' including...' → 'CHAMPAGNE'."""
         result = get_df_wine_year_and_area("08/09", "AOC", production_df)
         row = result[result["Region"] == "CHAMPAGNE including Côte des Blancs"]
         assert row.iloc[0]["Wine Region"] == "CHAMPAGNE"
