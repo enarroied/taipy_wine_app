@@ -6,7 +6,7 @@
 
 ## Introduction
 
-Welcome to the **TAIPY Wine Dashboard**, a demonstration project showcasing some capabilities of [Taipy](https://docs.taipy.io), a Python library for building interactive applications. 
+Welcome to the **TAIPY Wine Dashboard**, a demonstration project showcasing some capabilities of [Taipy](https://docs.taipy.io), a Python library for building interactive applications.
 
 📚 You can find more information on how to use build Taipy apps like this one in [the Medium article I wrote about it.](https://medium.com/gitconnected/create-a-dashboard-app-with-taipy-bc3b1fcfb3b0) 📚
 
@@ -48,4 +48,63 @@ You can download the CSV data from [Kaggle](https://www.kaggle.com/datasets/eric
 
 #### Centroids for the wine regions
 
-The centroids [come from another file](https://www.kaggle.com/datasets/ericnarro/french-wine-aop-regions) that I also listed on Kaggle, and that file comes from [official data from the French Government](https://www.data.gouv.fr/fr/datasets/cartes-des-grandes-regions-productrices-de-vins-aop-en-france/#/community-reuses). [This notebook shows how I created the centroids](https://www.kaggle.com/code/ericnarro/create-centroid-points-from-a-layer-of-polygons). 
+The centroids [come from another file](https://www.kaggle.com/datasets/ericnarro/french-wine-aop-regions) that I also listed on Kaggle, and that file comes from [official data from the French Government](https://www.data.gouv.fr/fr/datasets/cartes-des-grandes-regions-productrices-de-vins-aop-en-france/#/community-reuses). [This notebook shows how I created the centroids](https://www.kaggle.com/code/ericnarro/create-centroid-points-from-a-layer-of-polygons).
+
+## Running Taipy Tools
+
+You can run this application either **locally** or inside a **Docker container**.
+
+⚠️ Note: The provided code is **not production-grade**: it runs on Taipy’s default Flask server.
+In the future, I may adapt this to use a more robust WSGI server (e.g. Gunicorn).
+
+### Run Locally
+
+To run locally, you can use [`uv`](https://docs.astral.sh/uv/) to create a virtual environment and install dependencies from `pyproject.toml`:
+
+```bash
+uv venv
+uv pip install -r pyproject.toml
+```
+
+Then run the app:
+
+```bash
+cd src
+python main.py
+```
+
+Or, from the project root, directly with uv:
+
+```bash
+uv run --directory src main.py
+```
+
+### Run with Docker
+
+Build the Docker image:
+
+```bash
+docker build -t taipywineapp .
+```
+
+Run the container (mapping port 5000):
+
+```bash
+docker run -p 5000:5000 taipywineapp
+```
+
+You can then access the app at: http://localhost:5000
+
+**The Dockerfile:**
+
+- Uses Python 3.11 as the base.
+- Installs uv.
+- Copies pyproject.toml and uv.lock and installs dependencies at build time (not at runtime).
+- Runs as a non-root user (appuser) for better security.
+- Exposes port 5000 (default Taipy/Flask port).
+- Defines a healthcheck so Docker can monitor container health.
+- Runs the app with:
+
+  ```bash
+  taipy run --no-debug --no-reloader main.py -H 0.0.0.0 -P 5000
+  ```
