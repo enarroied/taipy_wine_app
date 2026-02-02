@@ -1,6 +1,6 @@
 from taipy.gui import State
 
-from algorithms import get_df_map_color, get_df_wine_year_and_area
+from algorithms import get_df_map_red_rose, get_df_map_white, get_df_wine_year_and_area
 
 
 def on_change_all_regions(state: State) -> None:
@@ -32,9 +32,5 @@ def on_change_all_regions(state: State) -> None:
         ].sum()
 
         # Update map dataframes:
-        s.df_map_red = get_df_map_color(
-            s.selected_year, "RED AND ROSE", s.df_wine_with_geometry
-        )
-        s.df_map_white = get_df_map_color(
-            s.selected_year, "WHITE", s.df_wine_with_geometry
-        )
+        s.df_map_red = get_df_map_red_rose(s.selected_year, s.df_wine_with_geometry)
+        s.df_map_white = get_df_map_white(s.selected_year, s.df_wine_with_geometry)

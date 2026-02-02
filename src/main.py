@@ -2,7 +2,12 @@ import taipy as tp
 from taipy import Orchestrator
 from taipy.gui import Gui
 
-from algorithms import create_df_region, get_df_map_color, get_df_wine_year_and_area
+from algorithms import (
+    create_df_region,
+    get_df_map_red_rose,
+    get_df_map_white,
+    get_df_wine_year_and_area,
+)
 from config.config import sc_wine_scenario
 from pages import all_regions_page, by_region_page, root_page
 
@@ -29,8 +34,8 @@ if __name__ == "__main__":
     df_wine_year = get_df_wine_year_and_area(
         selected_year, selected_area, df_wine_production
     )
-    df_map_red = get_df_map_color(selected_year, "RED AND ROSE", df_wine_with_geometry)
-    df_map_white = get_df_map_color(selected_year, "WHITE", df_wine_with_geometry)
+    df_map_red = get_df_map_red_rose(selected_year, df_wine_with_geometry)
+    df_map_white = get_df_map_white(selected_year, df_wine_with_geometry)
 
     # Variables for the labels:
     total_production = df_wine_year["Production"].sum()

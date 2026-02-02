@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from algorithms import get_df_map_color, get_df_wine_year_and_area
+from algorithms import get_df_map_red_rose, get_df_map_white, get_df_wine_year_and_area
 
 YEAR_COLS = [
     "08/09",
@@ -102,68 +102,121 @@ def production_df() -> pd.DataFrame:
 
 
 # ===========================================================================
-# Tests – get_df_map_color
+# Tests – get_df_map_red_rose
 # ===========================================================================
 
 
-class TestGetDfMapColor:
+EXPECTED_MAP_COLUMNS = ["Region", "latitude", "longitude", "Production", "size", "text"]
+
+
+class TestGetDfMapRedRose:
     # --- Output shape & columns ---
 
     def test_returns_dataframe(self, geometry_df):
-        result = get_df_map_color("08/09", "RED AND ROSE", geometry_df)
+        result = get_df_map_red_rose("08/09", geometry_df)
         assert isinstance(result, pd.DataFrame)
 
     def test_output_columns(self, geometry_df):
-        result = get_df_map_color("08/09", "RED AND ROSE", geometry_df)
-        assert list(result.columns) == [
-            "Region",
-            "latitude",
-            "longitude",
-            "Production",
-            "size",
-            "text",
-        ]
+        result = get_df_map_red_rose("08/09", geometry_df)
+        assert list(result.columns) == EXPECTED_MAP_COLUMNS
 
-    # --- Filtering by wine_type ---
+    # --- Filtering ---
 
-    def test_filters_to_requested_color_only(self, geometry_df):
-        result = get_df_map_color("08/09", "RED AND ROSE", geometry_df)
+    def test_returns_only_red_and_rose_rows(self, geometry_df):
+        result = get_df_map_red_rose("08/09", geometry_df)
         # Only one RED AND ROSE row exists in the fixture
         assert len(result) == 1
         assert result.iloc[0]["Region"] == "SUD-OUEST"
 
-    def test_white_filter_returns_white_rows_only(self, geometry_df):
-        result = get_df_map_color("08/09", "WHITE", geometry_df)
+    # --- Production = year / 10 ---
+
+    def test_production_divided_by_10(self, geometry_df):
+        # SUD-OUEST RED AND ROSE, 08/09 = 500 → Production = 50.0
+        result = get_df_map_red_rose("08/09", geometry_df)
+        assert result.iloc[0]["Production"] == 50.0
+
+    def test_production_uses_correct_year(self, geometry_df):
+        # SUD-OUEST RED AND ROSE, 09/10 = 1000 → Production = 100.0
+        result = get_df_map_red_rose("09/10", geometry_df)
+        assert result.iloc[0]["Production"] == 100.0
+
+    # --- size = Production / 5 ---
+
+    def test_size_is_production_divided_by_5(self, geometry_df):
+        result = get_df_map_red_rose("08/09", geometry_df)
+        row = result.iloc[0]
+        # Production = 50.0 → size = 10.0
+        assert row["size"] == row["Production"] / 5
+
+    # --- text label ---
+
+    def test_text_format(self, geometry_df):
+        result = get_df_map_red_rose("08/09", geometry_df)
+        # Production = 50.0 → "SUD-OUEST: 50.0 Ml"
+        assert result.iloc[0]["text"] == "SUD-OUEST: 50.0 Ml"
+
+    # --- Coordinates carried through ---
+
+    def test_latitude_longitude_preserved(self, geometry_df):
+        result = get_df_map_red_rose("08/09", geometry_df)
+        assert result.iloc[0]["latitude"] == 44.84
+        assert result.iloc[0]["longitude"] == -0.58
+
+    # --- Immutability ---
+
+    def test_does_not_mutate_input(self, geometry_df):
+        original = geometry_df.copy()
+        get_df_map_red_rose("08/09", geometry_df)
+        pd.testing.assert_frame_equal(geometry_df, original)
+
+
+# ===========================================================================
+# Tests – get_df_map_white
+# ===========================================================================
+
+
+class TestGetDfMapWhite:
+    # --- Output shape & columns ---
+
+    def test_returns_dataframe(self, geometry_df):
+        result = get_df_map_white("08/09", geometry_df)
+        assert isinstance(result, pd.DataFrame)
+
+    def test_output_columns(self, geometry_df):
+        result = get_df_map_white("08/09", geometry_df)
+        assert list(result.columns) == EXPECTED_MAP_COLUMNS
+
+    # --- Filtering ---
+
+    def test_returns_only_white_rows(self, geometry_df):
+        result = get_df_map_white("08/09", geometry_df)
         assert len(result) == 2
         assert set(result["Region"]) == {"SUD-OUEST", "CHAMPAGNE"}
 
     # --- Production = year / 10 ---
 
-    def test_production_divided_by_10(self, geometry_df):
-        # RED AND ROSE, 08/09 = 500 → Production = 50.0
-        result = get_df_map_color("08/09", "RED AND ROSE", geometry_df)
-        assert result.iloc[0]["Production"] == 50.0
+    def test_production_sud_ouest(self, geometry_df):
+        # SUD-OUEST WHITE, 08/09 = 600 → Production = 60.0
+        result = get_df_map_white("08/09", geometry_df)
+        sud_ouest = result[result["Region"] == "SUD-OUEST"]
+        assert sud_ouest.iloc[0]["Production"] == 60.0
 
-    def test_production_uses_correct_year(self, geometry_df):
-        # RED AND ROSE, 09/10 = 1000 → Production = 100.0
-        result = get_df_map_color("09/10", "RED AND ROSE", geometry_df)
-        assert result.iloc[0]["Production"] == 100.0
-
-    def test_production_white_champagne(self, geometry_df):
+    def test_production_champagne(self, geometry_df):
         # CHAMPAGNE WHITE, 08/09 = 800 → Production = 80.0
-        result = get_df_map_color("08/09", "WHITE", geometry_df)
+        result = get_df_map_white("08/09", geometry_df)
         champagne = result[result["Region"] == "CHAMPAGNE"]
         assert champagne.iloc[0]["Production"] == 80.0
 
+    def test_production_uses_correct_year(self, geometry_df):
+        # CHAMPAGNE WHITE, 09/10 = 2000 → Production = 200.0
+        result = get_df_map_white("09/10", geometry_df)
+        champagne = result[result["Region"] == "CHAMPAGNE"]
+        assert champagne.iloc[0]["Production"] == 200.0
+
     # --- size = Production / 5 ---
 
-    def test_size_is_production_divided_by_5(self, geometry_df):
-        result = get_df_map_color("08/09", "RED AND ROSE", geometry_df)
-        row = result.iloc[0]
-        assert row["size"] == row["Production"] / 5
-
-    def test_size_values_white(self, geometry_df):
-        result = get_df_map_color("09/10", "WHITE", geometry_df)
+    def test_size_values(self, geometry_df):
+        result = get_df_map_white("09/10", geometry_df)
         # SUD-OUEST WHITE 09/10=600 → Production=60 → size=12
         # CHAMPAGNE WHITE 09/10=2000 → Production=200 → size=40
         sud_ouest = result[result["Region"] == "SUD-OUEST"].iloc[0]
@@ -173,13 +226,8 @@ class TestGetDfMapColor:
 
     # --- text label ---
 
-    def test_text_format(self, geometry_df):
-        result = get_df_map_color("08/09", "RED AND ROSE", geometry_df)
-        # Production = 50.0 → "SUD-OUEST: 50.0 Ml"
-        assert result.iloc[0]["text"] == "SUD-OUEST: 50.0 Ml"
-
     def test_text_contains_region_and_ml(self, geometry_df):
-        result = get_df_map_color("09/10", "WHITE", geometry_df)
+        result = get_df_map_white("09/10", geometry_df)
         for _, row in result.iterrows():
             assert row["text"].startswith(row["Region"] + ": ")
             assert row["text"].endswith(" Ml")
@@ -187,7 +235,7 @@ class TestGetDfMapColor:
     # --- Coordinates carried through ---
 
     def test_latitude_longitude_preserved(self, geometry_df):
-        result = get_df_map_color("08/09", "WHITE", geometry_df)
+        result = get_df_map_white("08/09", geometry_df)
         champagne = result[result["Region"] == "CHAMPAGNE"].iloc[0]
         assert champagne["latitude"] == 48.34
         assert champagne["longitude"] == 4.03
@@ -196,7 +244,7 @@ class TestGetDfMapColor:
 
     def test_does_not_mutate_input(self, geometry_df):
         original = geometry_df.copy()
-        get_df_map_color("08/09", "RED AND ROSE", geometry_df)
+        get_df_map_white("08/09", geometry_df)
         pd.testing.assert_frame_equal(geometry_df, original)
 
 
@@ -282,8 +330,7 @@ class TestGetDfWineYearAndArea:
         assert row.iloc[0]["Wine Region"] == "SANCERRE"
 
     def test_label_strips_including_clause(self, production_df):
-        """'CHAMPAGNE including Côte des Blancs'
-        → strip ' including...' → 'CHAMPAGNE'."""
+        """'CHAMPAGNE including Côte des Blancs' → strip ' including...' → 'CHAMPAGNE'."""
         result = get_df_wine_year_and_area("08/09", "AOC", production_df)
         row = result[result["Region"] == "CHAMPAGNE including Côte des Blancs"]
         assert row.iloc[0]["Wine Region"] == "CHAMPAGNE"

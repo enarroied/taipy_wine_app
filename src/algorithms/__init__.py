@@ -1,5 +1,8 @@
 from .select_data_all_regions import (
-    get_df_map_color as get_df_map_color,
+    get_df_map_red_rose as get_df_map_red_rose,
+)
+from .select_data_all_regions import (
+    get_df_map_white as get_df_map_white,
 )
 from .select_data_all_regions import (
     get_df_wine_year_and_area as get_df_wine_year_and_area,
