@@ -1,14 +1,27 @@
+# TAIPY Wine Dashboard
+
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
-![Python Version](https://img.shields.io/badge/Python-3.11%2B-blue.svg)
+![Python Version](https://img.shields.io/badge/Python-3.9%E2%80%933.12-blue)
+![License](https://img.shields.io/badge/Taipy-4.1-blue.svg)
+[![codecov](https://codecov.io/github/enarroied/taipy_wine_app/branch/master/graph/badge.svg?token=HLZVB6WFMT)](https://codecov.io/github/enarroied/taipy_wine_app)
 
-# TAIPY Wine Dashboard
+- [TAIPY Wine Dashboard](#taipy-wine-dashboard)
+  - [Introduction](#introduction)
+  - [Medium Article](#medium-article)
+  - [Features](#features)
+  - [Getting Started](#getting-started)
+    - [Installation](#installation)
+    - [Data](#data)
+      - [Wine production by year and region](#wine-production-by-year-and-region)
+      - [Centroids for the wine regions](#centroids-for-the-wine-regions)
+  - [Running Taipy Wine App](#running-taipy-wine-app)
+    - [Run Locally](#run-locally)
+    - [Run with Docker](#run-with-docker)
 
 ## Introduction
 
 Welcome to the **TAIPY Wine Dashboard**, a demonstration project showcasing some capabilities of [Taipy](https://docs.taipy.io), a Python library for building interactive applications.
-
-📚 You can find more information on how to use build Taipy apps like this one in [the Medium article I wrote about it.](https://medium.com/gitconnected/create-a-dashboard-app-with-taipy-bc3b1fcfb3b0) 📚
 
 This dashboard allows you to explore wine production data for various French wine regions, providing insights into production statistics, geographical distribution, and more. Building Business Intelligence (BI) dashboards.
 
@@ -17,6 +30,23 @@ This dashboard allows you to explore wine production data for various French win
 The application uses both Taipy GUI and Taipy Core. You can open the ```config.toml``` file with Taipy studio on VS Code.
 
 ![Taipy Studio showing the backend](images/taipy_config_graph.png)
+
+## Medium Article
+
+📚 [Long ago, I wrote an article about this app.](https://medium.com/gitconnected/create-a-dashboard-app-with-taipy-bc3b1fcfb3b0) 📚
+
+**I DO NOT RECOMMEND taking that article as reference to learn Taipy**, for two reasons:
+
+- It uses outdated versions of Taipy and the Markdown syntax, which is not ideal. You are better off using the Python API.
+- When I wrote this article, my coding skills and my understanding of Taipy (both) were not great.
+
+**However**, I have refactored the application ever since, and the code is now in better shape. [I saved the older version for reference in a dedicated branch](https://github.com/enarroied/taipy_wine_app/tree/original_app). Please ignore it.
+
+If you want to learn Taipy, here are some resources you may want to explore:
+
+- [Getting Started with Taipy](https://amzn.to/3O2QXQw), my book about Taipy
+- [I wrote plenty of Medium articles about Taipy](https://medium.com/@ericnarro/list/taipy-0e2b6bbedeb1)
+- [Taipy's documentation](https://docs.taipy.io/en/latest/tutorials/getting_started/)
 
 ## Features
 
