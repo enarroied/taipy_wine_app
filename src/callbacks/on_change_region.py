@@ -1,6 +1,6 @@
 from taipy.gui import State
 
-from algorithms import create_df_region
+from algorithms import create_df_region_red, create_df_region_white
 
 
 def on_change_region(state: State) -> None:
@@ -17,6 +17,9 @@ def on_change_region(state: State) -> None:
         None
     """
     with state as s:
-        s.df_region_red, s.df_region_white = create_df_region(
+        s.df_region_red = create_df_region_red(
+            s.df_wine_with_geometry, s.selected_region, s.year_list
+        )
+        s.df_region_white = create_df_region_white(
             s.df_wine_with_geometry, s.selected_region, s.year_list
         )

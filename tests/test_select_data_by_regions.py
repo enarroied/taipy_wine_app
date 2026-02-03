@@ -1,13 +1,11 @@
 import pandas as pd
 import pytest
 
-from src.algorithms import clean_df_region_color, create_df_region
-
-# ---------------------------------------------------------------------------
-# Paste (or import) the functions under test here so the file is self-contained.
-# Replace this block with:
-#   from your_module import clean_df_region_color, create_df_region
-# ---------------------------------------------------------------------------
+from algorithms import (
+    clean_df_region_color,
+    create_df_region_red,
+    create_df_region_white,
+)
 
 YEAR_COLS = [
     "08/09",
@@ -126,92 +124,129 @@ class TestCleanDfRegionColor:
 
 
 # ===========================================================================
-# Tests – create_df_region
+# Tests – create_df_region_red
 # ===========================================================================
 
 
-class TestCreateDfRegion:
-    # --- Return type ---
+EXPECTED_HARVEST_COLUMNS = ["Harvest", "years"]
 
-    def test_returns_tuple_of_two_dataframes(self, full_geometry_df):
-        result = create_df_region(full_geometry_df, "SUD-OUEST", YEAR_COLS)
-        assert isinstance(result, tuple)
-        assert len(result) == 2
-        assert isinstance(result[0], pd.DataFrame)
-        assert isinstance(result[1], pd.DataFrame)
 
-    # --- Normal region (both colours go through clean_df_region_color) ---
+class TestCreateDfRegionRed:
+    # --- Output shape & columns ---
 
-    def test_normal_region_red_has_correct_columns(self, full_geometry_df):
-        red, _ = create_df_region(full_geometry_df, "SUD-OUEST", YEAR_COLS)
-        assert list(red.columns) == ["Harvest", "years"]
+    def test_returns_dataframe(self, full_geometry_df):
+        result = create_df_region_red(full_geometry_df, "SUD-OUEST", YEAR_COLS)
+        assert isinstance(result, pd.DataFrame)
 
-    def test_normal_region_white_has_correct_columns(self, full_geometry_df):
-        _, white = create_df_region(full_geometry_df, "SUD-OUEST", YEAR_COLS)
-        assert list(white.columns) == ["Harvest", "years"]
+    def test_output_columns(self, full_geometry_df):
+        result = create_df_region_red(full_geometry_df, "SUD-OUEST", YEAR_COLS)
+        assert list(result.columns) == EXPECTED_HARVEST_COLUMNS
 
-    def test_normal_region_red_harvest_divided_by_10(self, full_geometry_df):
-        red, _ = create_df_region(full_geometry_df, "SUD-OUEST", YEAR_COLS)
+    # --- Normal region (goes through clean_df_region_color) ---
+
+    def test_normal_region_harvest_divided_by_10(self, full_geometry_df):
+        result = create_df_region_red(full_geometry_df, "SUD-OUEST", YEAR_COLS)
         # All year values were 200 → Harvest should be 20.0 for every row
-        assert all(red["Harvest"] == 20.0)
-
-    def test_normal_region_white_harvest_divided_by_10(self, full_geometry_df):
-        _, white = create_df_region(full_geometry_df, "SUD-OUEST", YEAR_COLS)
-        # All year values were 150 → Harvest should be 15.0
-        assert all(white["Harvest"] == 15.0)
+        assert all(result["Harvest"] == 20.0)
 
     def test_normal_region_years_match_year_cols(self, full_geometry_df):
-        red, white = create_df_region(full_geometry_df, "SUD-OUEST", YEAR_COLS)
-        assert list(red["years"]) == YEAR_COLS
-        assert list(white["years"]) == YEAR_COLS
+        result = create_df_region_red(full_geometry_df, "SUD-OUEST", YEAR_COLS)
+        assert list(result["years"]) == YEAR_COLS
 
-    # --- White-only regions (CHAMPAGNE / ALSACE ET EST) ---
-    # These trigger the fallback-red branch instead of clean_df_region_color.
+    # --- Empty regions (no red data) ---
 
-    def test_champagne_red_is_all_zeros(self, full_geometry_df):
-        red, _ = create_df_region(full_geometry_df, "CHAMPAGNE", YEAR_COLS)
-        assert all(red["Harvest"] == 0)
+    def test_champagne_returns_all_zeros(self, full_geometry_df):
+        result = create_df_region_red(full_geometry_df, "CHAMPAGNE", YEAR_COLS)
+        assert all(result["Harvest"] == 0)
 
-    def test_champagne_red_has_correct_columns(self, full_geometry_df):
-        red, _ = create_df_region(full_geometry_df, "CHAMPAGNE", YEAR_COLS)
-        assert list(red.columns) == ["Harvest", "years"]
+    def test_champagne_has_correct_columns(self, full_geometry_df):
+        result = create_df_region_red(full_geometry_df, "CHAMPAGNE", YEAR_COLS)
+        assert list(result.columns) == EXPECTED_HARVEST_COLUMNS
 
-    def test_champagne_red_years_match_year_cols(self, full_geometry_df):
-        """Fallback red DataFrame must cover exactly the same years as year_cols."""
-        red, _ = create_df_region(full_geometry_df, "CHAMPAGNE", YEAR_COLS)
-        assert list(red["years"]) == YEAR_COLS
-        assert len(red) == len(YEAR_COLS)
+    def test_champagne_years_match_year_cols(self, full_geometry_df):
+        result = create_df_region_red(full_geometry_df, "CHAMPAGNE", YEAR_COLS)
+        assert list(result["years"]) == YEAR_COLS
+        assert len(result) == len(YEAR_COLS)
 
-    def test_champagne_red_length_driven_by_year_cols(self, full_geometry_df):
-        """Passing a subset of year_cols should produce a matching-length fallback."""
+    def test_empty_region_length_driven_by_year_cols(self, full_geometry_df):
+        """Passing a subset of year_cols produces a matching-length empty DataFrame."""
         subset = ["08/09", "09/10", "10/11"]
-        red, _ = create_df_region(full_geometry_df, "CHAMPAGNE", subset)
-        assert list(red["years"]) == subset
-        assert len(red) == 3
-        assert all(red["Harvest"] == 0)
+        result = create_df_region_red(full_geometry_df, "CHAMPAGNE", subset)
+        assert list(result["years"]) == subset
+        assert len(result) == 3
+        assert all(result["Harvest"] == 0)
 
-    def test_champagne_white_is_cleaned_normally(self, full_geometry_df):
-        _, white = create_df_region(full_geometry_df, "CHAMPAGNE", YEAR_COLS)
-        # All year values were 500 → Harvest = 50.0
-        assert list(white.columns) == ["Harvest", "years"]
-        assert all(white["Harvest"] == 50.0)
+    def test_alsace_returns_all_zeros(self, full_geometry_df):
+        result = create_df_region_red(full_geometry_df, "ALSACE ET EST", YEAR_COLS)
+        assert all(result["Harvest"] == 0)
 
-    def test_alsace_red_is_all_zeros(self, full_geometry_df):
-        red, _ = create_df_region(full_geometry_df, "ALSACE ET EST", YEAR_COLS)
-        assert all(red["Harvest"] == 0)
-
-    def test_alsace_red_years_match_year_cols(self, full_geometry_df):
-        red, _ = create_df_region(full_geometry_df, "ALSACE ET EST", YEAR_COLS)
-        assert list(red["years"]) == YEAR_COLS
-
-    def test_alsace_white_is_cleaned_normally(self, full_geometry_df):
-        _, white = create_df_region(full_geometry_df, "ALSACE ET EST", YEAR_COLS)
-        # All year values were 300 → Harvest = 30.0
-        assert all(white["Harvest"] == 30.0)
+    def test_alsace_years_match_year_cols(self, full_geometry_df):
+        result = create_df_region_red(full_geometry_df, "ALSACE ET EST", YEAR_COLS)
+        assert list(result["years"]) == YEAR_COLS
 
     # --- Immutability ---
 
     def test_does_not_mutate_input(self, full_geometry_df):
         original = full_geometry_df.copy()
-        create_df_region(full_geometry_df, "SUD-OUEST", YEAR_COLS)
+        create_df_region_red(full_geometry_df, "SUD-OUEST", YEAR_COLS)
+        pd.testing.assert_frame_equal(full_geometry_df, original)
+
+
+# ===========================================================================
+# Tests – create_df_region_white
+# ===========================================================================
+
+
+class TestCreateDfRegionWhite:
+    # --- Output shape & columns ---
+
+    def test_returns_dataframe(self, full_geometry_df):
+        result = create_df_region_white(full_geometry_df, "SUD-OUEST", YEAR_COLS)
+        assert isinstance(result, pd.DataFrame)
+
+    def test_output_columns(self, full_geometry_df):
+        result = create_df_region_white(full_geometry_df, "SUD-OUEST", YEAR_COLS)
+        assert list(result.columns) == EXPECTED_HARVEST_COLUMNS
+
+    # --- Normal regions (go through clean_df_region_color) ---
+
+    def test_sud_ouest_harvest_divided_by_10(self, full_geometry_df):
+        result = create_df_region_white(full_geometry_df, "SUD-OUEST", YEAR_COLS)
+        # All year values were 150 → Harvest should be 15.0
+        assert all(result["Harvest"] == 15.0)
+
+    def test_champagne_harvest_divided_by_10(self, full_geometry_df):
+        result = create_df_region_white(full_geometry_df, "CHAMPAGNE", YEAR_COLS)
+        # All year values were 500 → Harvest = 50.0
+        assert all(result["Harvest"] == 50.0)
+
+    def test_alsace_harvest_divided_by_10(self, full_geometry_df):
+        result = create_df_region_white(full_geometry_df, "ALSACE ET EST", YEAR_COLS)
+        # All year values were 300 → Harvest = 30.0
+        assert all(result["Harvest"] == 30.0)
+
+    def test_years_match_year_cols(self, full_geometry_df):
+        result = create_df_region_white(full_geometry_df, "SUD-OUEST", YEAR_COLS)
+        assert list(result["years"]) == YEAR_COLS
+
+    # --- Empty regions (no white data - edge case) ---
+
+    def test_empty_region_returns_all_zeros(self, full_geometry_df):
+        """If a region has no white wine data, return empty structure."""
+        # Create a red-only region by adding a row
+        df = full_geometry_df.copy()
+        red_only_row = _make_geometry_row(
+            "BORDEAUX", "RED AND ROSE", {col: 300 for col in YEAR_COLS}
+        )
+        df = pd.concat([df, pd.DataFrame([red_only_row])], ignore_index=True)
+
+        result = create_df_region_white(df, "BORDEAUX", YEAR_COLS)
+        assert all(result["Harvest"] == 0)
+        assert list(result["years"]) == YEAR_COLS
+
+    # --- Immutability ---
+
+    def test_does_not_mutate_input(self, full_geometry_df):
+        original = full_geometry_df.copy()
+        create_df_region_white(full_geometry_df, "SUD-OUEST", YEAR_COLS)
         pd.testing.assert_frame_equal(full_geometry_df, original)

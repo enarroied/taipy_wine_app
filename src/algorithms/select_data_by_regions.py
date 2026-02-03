@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List
 
 import pandas as pd
 
@@ -31,40 +31,86 @@ def clean_df_region_color(df_region_color: pd.DataFrame) -> pd.DataFrame:
     return df_region_color_clean
 
 
-def create_df_region(
+def create_df_region_red(
     df_wine_with_geometry: pd.DataFrame, selected_region: str, year_cols: List
-) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    """Create DataFrames for red and white wine production statistics
-        for a selected region.
+) -> pd.DataFrame:
+    """Create DataFrame for red and rosé wine production in a selected region.
 
-    Takes a selected region (`selected_region`) and extracts relevant information from
-        the original wine production DataFrame (`df_wine_with_geometry`). It creates
-        separate DataFrames for red and white wine production.
+    For CHAMPAGNE and ALSACE ET EST, which produce negligible red wine, returns
+    a zero-filled fallback DataFrame. For all other regions, applies the standard
+    cleaning transformation.
 
     Args:
-        selected_region (str): The selected wine region.
+        df_wine_with_geometry (pd.DataFrame): DataFrame with wine production and
+            geographical information.
+        selected_region (str): The wine region.
+        year_cols (List): List of year column names.
 
     Returns:
-        Tuple[pd.DataFrame, pd.DataFrame]: A tuple containing two DataFrames: one for
-            red wine ('df_region_red') and one for white wine ('df_region_white').
+        pd.DataFrame: Cleaned DataFrame with 'Harvest' and 'years' columns.
     """
-    df_region = df_wine_with_geometry.copy()
-    df_region = df_region[df_region["Region"] == selected_region]
+    df_filtered = _filter_region_and_wine_type(
+        df_wine_with_geometry, selected_region, "RED AND ROSE"
+    )
 
-    df_region_red = df_region[df_region["wine_type"] == "RED AND ROSE"].reset_index(
-        drop=True
+    if df_filtered.empty:
+        return _empty_harvest_dataframe(year_cols)
+
+    return clean_df_region_color(df_filtered)
+
+
+def create_df_region_white(
+    df_wine_with_geometry: pd.DataFrame, selected_region: str, year_cols: List
+) -> pd.DataFrame:
+    """Create DataFrame for white wine production in a selected region.
+
+    Args:
+        df_wine_with_geometry (pd.DataFrame): DataFrame with wine production and
+            geographical information.
+        selected_region (str): The wine region.
+
+    Returns:
+        pd.DataFrame: Cleaned DataFrame with 'Harvest' and 'years' columns.
+    """
+    df_filtered = _filter_region_and_wine_type(
+        df_wine_with_geometry, selected_region, "WHITE"
     )
-    df_region_white = df_region[df_region["wine_type"] == "WHITE"].reset_index(
-        drop=True
-    )
-    if selected_region not in ("CHAMPAGNE", "ALSACE ET EST"):
-        df_region_red = clean_df_region_color(df_region_red)
-    else:
-        df_region_red = pd.DataFrame.from_dict(
-            {
-                "Harvest": [0] * len(year_cols),
-                "years": year_cols,
-            }
-        )
-    df_region_white = clean_df_region_color(df_region_white)
-    return (df_region_red, df_region_white)
+    if df_filtered.empty:
+        return _empty_harvest_dataframe(year_cols)
+    return clean_df_region_color(df_filtered)
+
+
+def _filter_region_and_wine_type(
+    df_wine_with_geometry: pd.DataFrame, selected_region: str, wine_type: str
+) -> pd.DataFrame:
+    """Filter DataFrame to a specific region and wine type.
+
+    Args:
+        df_wine_with_geometry (pd.DataFrame): DataFrame with wine production and
+            geographical information.
+        selected_region (str): The wine region to filter to.
+        wine_type (str): The wine type to filter to (e.g., 'RED AND ROSE', 'WHITE').
+
+    Returns:
+        pd.DataFrame: Filtered DataFrame containing only rows matching the region
+            and wine type.
+    """
+    df_region = df_wine_with_geometry[
+        df_wine_with_geometry["Region"] == selected_region
+    ]
+    return df_region[df_region["wine_type"] == wine_type].reset_index(drop=True)
+
+
+def _empty_harvest_dataframe(year_cols: List) -> pd.DataFrame:
+    """Create an empty harvest DataFrame when no data exists for a region/wine type.
+
+    Returns a DataFrame with zero harvest values for all years, matching the
+    structure expected after clean_df_region_color transformation.
+
+    Args:
+        year_cols (List): List of year column names.
+
+    Returns:
+        pd.DataFrame: DataFrame with 'Harvest' and 'years' columns, all harvests zero.
+    """
+    return pd.DataFrame({"Harvest": [0] * len(year_cols), "years": year_cols})

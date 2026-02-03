@@ -3,7 +3,8 @@ from taipy import Orchestrator
 from taipy.gui import Gui
 
 from algorithms import (
-    create_df_region,
+    create_df_region_red,
+    create_df_region_white,
     get_df_map_red_rose,
     get_df_map_white,
     get_df_wine_year_and_area,
@@ -50,7 +51,10 @@ if __name__ == "__main__":
     list_of_regions = df_wine_with_geometry["Region"].unique().tolist()
     selected_region = "SUD-OUEST"
 
-    df_region_red, df_region_white = create_df_region(
+    df_region_red = create_df_region_red(
+        df_wine_with_geometry, selected_region, year_list
+    )
+    df_region_white = create_df_region_white(
         df_wine_with_geometry, selected_region, year_list
     )
 
