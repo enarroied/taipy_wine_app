@@ -1,3 +1,4 @@
+from .select_data_all_regions import compute_region_data as compute_region_data
 from .select_data_all_regions import (
     get_df_map_red_rose as get_df_map_red_rose,
 )

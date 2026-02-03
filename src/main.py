@@ -3,11 +3,9 @@ from taipy import Orchestrator
 from taipy.gui import Gui
 
 from algorithms import (
+    compute_region_data,
     create_df_region_red,
     create_df_region_white,
-    get_df_map_red_rose,
-    get_df_map_white,
-    get_df_wine_year_and_area,
 )
 from config.config import sc_wine_scenario
 from pages import all_regions_page, by_region_page, root_page
@@ -32,20 +30,16 @@ if __name__ == "__main__":
     area_type_list = ["AOC", "Region"]
     selected_area = area_type_list[0]
 
-    df_wine_year = get_df_wine_year_and_area(
-        selected_year, selected_area, df_wine_production
+    region_data = compute_region_data(
+        selected_year, selected_area, df_wine_production, df_wine_with_geometry
     )
-    df_map_red = get_df_map_red_rose(selected_year, df_wine_with_geometry)
-    df_map_white = get_df_map_white(selected_year, df_wine_with_geometry)
 
-    # Variables for the labels:
-    total_production = df_wine_year["Production"].sum()
-    red_rose_production = df_wine_year[df_wine_year["wine_type"] == "RED AND ROSE"][
-        "Production"
-    ].sum()
-    white_production = df_wine_year[df_wine_year["wine_type"] == "WHITE"][
-        "Production"
-    ].sum()
+    df_wine_year = region_data["df_wine_year"]
+    df_map_red = region_data["df_map_red"]
+    df_map_white = region_data["df_map_white"]
+    total_production = region_data["total_production"]
+    red_rose_production = region_data["red_rose_production"]
+    white_production = region_data["white_production"]
 
     # variables for by_region page
     list_of_regions = df_wine_with_geometry["Region"].unique().tolist()

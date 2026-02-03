@@ -1,33 +1,47 @@
 import pandas as pd
 
 
-def _prepare_map_data(
-    year: str, wine_type: str, df_wine_with_geometry: pd.DataFrame
-) -> pd.DataFrame:
-    """Create a DataFrame for map coloring based on wine production data.
+def compute_region_data(
+    selected_year: str,
+    selected_area: str,
+    df_wine_production: pd.DataFrame,
+    df_wine_with_geometry: pd.DataFrame,
+) -> dict:
+    """Compute all derived data for the all-regions view.
 
     Args:
-        year (str): The selected year for wine production data.
-        wine_type (str): The wine type to filter for (e.g., 'RED AND ROSE', 'WHITE').
-        df_wine_with_geometry (pd.DataFrame): DataFrame containing wine production
-            and geographical information.
+        selected_year: Year to analyze
+        selected_area: Area type ('AOC' or 'Region')
+        df_wine_production: Raw production data
+        df_wine_with_geometry: Production data with coordinates
 
     Returns:
-        pd.DataFrame: A DataFrame with columns Region, latitude, longitude,
-            Production, size, and text for map visualization.
+        dict: Contains keys df_wine_year, total_production, red_rose_production,
+            white_production, df_map_red, df_map_white
     """
-    df_geometry_color = df_wine_with_geometry[
-        df_wine_with_geometry["wine_type"] == wine_type
-    ].copy()
-
-    df_map_color = df_geometry_color[["Region", "latitude", "longitude"]].copy()
-    df_map_color["Production"] = df_geometry_color[year] / 10
-    df_map_color["size"] = df_map_color["Production"] / 5
-    df_map_color["text"] = (
-        df_map_color["Region"] + ": " + df_map_color["Production"].astype(str) + " Ml"
+    df_wine_year = get_df_wine_year_and_area(
+        selected_year, selected_area, df_wine_production
     )
 
-    return df_map_color
+    total_production = df_wine_year["Production"].sum()
+    red_rose_production = df_wine_year[df_wine_year["wine_type"] == "RED AND ROSE"][
+        "Production"
+    ].sum()
+    white_production = df_wine_year[df_wine_year["wine_type"] == "WHITE"][
+        "Production"
+    ].sum()
+
+    df_map_red = get_df_map_red_rose(selected_year, df_wine_with_geometry)
+    df_map_white = get_df_map_white(selected_year, df_wine_with_geometry)
+
+    return {
+        "df_wine_year": df_wine_year,
+        "total_production": total_production,
+        "red_rose_production": red_rose_production,
+        "white_production": white_production,
+        "df_map_red": df_map_red,
+        "df_map_white": df_map_white,
+    }
 
 
 def get_df_map_red_rose(year: str, df_wine_with_geometry: pd.DataFrame) -> pd.DataFrame:
@@ -56,6 +70,35 @@ def get_df_map_white(year: str, df_wine_with_geometry: pd.DataFrame) -> pd.DataF
         pd.DataFrame: Map visualization data for white wines.
     """
     return _prepare_map_data(year, "WHITE", df_wine_with_geometry)
+
+
+def _prepare_map_data(
+    year: str, wine_type: str, df_wine_with_geometry: pd.DataFrame
+) -> pd.DataFrame:
+    """Create a DataFrame for map coloring based on wine production data.
+
+    Args:
+        year (str): The selected year for wine production data.
+        wine_type (str): The wine type to filter for (e.g., 'RED AND ROSE', 'WHITE').
+        df_wine_with_geometry (pd.DataFrame): DataFrame containing wine production
+            and geographical information.
+
+    Returns:
+        pd.DataFrame: A DataFrame with columns Region, latitude, longitude,
+            Production, size, and text for map visualization.
+    """
+    df_geometry_color = df_wine_with_geometry[
+        df_wine_with_geometry["wine_type"] == wine_type
+    ].copy()
+
+    df_map_color = df_geometry_color[["Region", "latitude", "longitude"]].copy()
+    df_map_color["Production"] = df_geometry_color[year] / 10
+    df_map_color["size"] = df_map_color["Production"] / 5
+    df_map_color["text"] = (
+        df_map_color["Region"] + ": " + df_map_color["Production"].astype(str) + " Ml"
+    )
+
+    return df_map_color
 
 
 def get_df_wine_year_and_area(
