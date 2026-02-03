@@ -1,0 +1,44 @@
+:root {
+  --color-primary: #b33030;
+  --color-strong: #e63946;
+  --color-accent: #d97706;
+  --color-gold: #a05e12;
+
+  --font-serif: 'Playfair Display', 'Georgia', serif;
+}
+
+strong, b {
+  color: var(--color-strong);
+  font-weight: 800;
+  text-shadow: 0px 0px 1px rgba(0,0,0,0.1);
+}
+
+h1, h2, h3 {
+  color: var(--color-primary);
+  font-family: var(--font-serif);
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 2.5rem;
+  border-bottom: 3px double rgba(160, 94, 18, 0.6);
+  padding-bottom: 0.3rem;
+  text-transform: capitalize;
+}
+
+h2 {
+  font-size: 2rem;
+  border-left: 5px solid var(--color-accent);
+  padding-left: 15px;
+  margin-left: -5px;
+}
+
+h3 {
+  font-size: 1.3rem;
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}

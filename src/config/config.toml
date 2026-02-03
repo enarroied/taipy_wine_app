@@ -1,0 +1,38 @@
+[TAIPY]
+
+[DATA_NODE.year_list]
+storage_type = "generic"
+read_fct = "config.read_yaml_list.read_yaml_list:function"
+read_fct_args = [ "data/dataset_years.yaml",]
+
+[DATA_NODE.wine_production]
+storage_type = "csv"
+default_path = "data/wine_harvest_france_aoc_09_19.csv"
+
+[DATA_NODE.wine_production_with_stats]
+
+[DATA_NODE.geometry]
+storage_type = "json"
+default_path = "data/french_wine_bassin_centroids.geojson"
+
+[DATA_NODE.wine_production_with_geometry]
+
+[TASK.add_wine_stats]
+function = "algorithms.transform_dataset.add_basic_stats:function"
+inputs = [ "wine_production:SECTION", "year_list:SECTION",]
+outputs = [ "wine_production_with_stats:SECTION",]
+skippable = "False:bool"
+
+[TASK.add_geometry]
+function = "algorithms.transform_dataset.add_geometry:function"
+inputs = [ "wine_production_with_stats:SECTION", "geometry:SECTION", "year_list:SECTION",]
+outputs = [ "wine_production_with_geometry:SECTION",]
+skippable = "False:bool"
+
+[SCENARIO.sc_wine]
+tasks = [ "add_wine_stats:SECTION", "add_geometry:SECTION",]
+additional_data_nodes = []
+
+[SCENARIO.sc_wine.comparators]
+
+[SCENARIO.sc_wine.sequences]
