@@ -3,7 +3,7 @@ from taipy.gui import State
 from algorithms import compute_region_data
 
 
-def on_change_all_regions(state: State) -> None:
+def compute_region_data_callback(state: State) -> None:
     """Update state based on a change in selected year and area type."""
     with state as s:
         data = compute_region_data(

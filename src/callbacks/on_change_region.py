@@ -3,7 +3,7 @@ from taipy.gui import State
 from algorithms import create_df_region_red, create_df_region_white
 
 
-def on_change_region(state: State) -> None:
+def create_df_region_callback(state: State) -> None:
     """Update red and white wine DataFrames based on a change in the selected region.
 
     This function takes the current state (`state`) and updates the red and white wine

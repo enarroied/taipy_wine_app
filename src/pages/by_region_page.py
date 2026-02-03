@@ -1,13 +1,13 @@
 import taipy.gui.builder as tgb
 
-from callbacks import on_change_region
+from callbacks import create_df_region_callback
 
 with tgb.Page() as by_region_page:
     with tgb.layout("1 2"):
         tgb.selector(
             "{selected_region}",
             lov="{list_of_regions}",
-            on_change=on_change_region,
+            on_change=create_df_region_callback,
             dropdown=True,
             label="Choose Region",
         )

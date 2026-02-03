@@ -1,6 +1,6 @@
 import taipy.gui.builder as tgb
 
-from callbacks import on_change_all_regions
+from callbacks import compute_region_data_callback
 
 with tgb.Page() as all_regions_page:
     tgb.text(
@@ -9,7 +9,7 @@ with tgb.Page() as all_regions_page:
     tgb.selector(
         "{selected_year}",
         lov="{year_list_for_selector}",
-        on_change=on_change_all_regions,
+        on_change=compute_region_data_callback,
         dropdown=True,
         label="Choose Year",
     )
@@ -27,7 +27,9 @@ with tgb.Page() as all_regions_page:
 
     tgb.text("## Production | **by {selected_area}**", mode="md")
     tgb.toggle(
-        "{selected_area}", lov="{area_type_list}", on_change=on_change_all_regions
+        "{selected_area}",
+        lov="{area_type_list}",
+        on_change=compute_region_data_callback,
     )
     with tgb.layout("1 1 "):
         tgb.chart(
