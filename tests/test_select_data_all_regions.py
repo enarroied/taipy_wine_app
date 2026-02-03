@@ -1,7 +1,12 @@
 import pandas as pd
 import pytest
 
-from algorithms import get_df_map_red_rose, get_df_map_white, get_df_wine_year_and_area
+from algorithms import (
+    compute_region_data,
+    get_df_map_red_rose,
+    get_df_map_white,
+    get_df_wine_year_and_area,
+)
 
 YEAR_COLS = [
     "08/09",
@@ -356,3 +361,117 @@ class TestGetDfWineYearAndArea:
         original = production_df.copy()
         get_df_wine_year_and_area("08/09", "AOC", production_df)
         pd.testing.assert_frame_equal(production_df, original)
+
+
+# ===========================================================================
+# Tests – compute_region_data
+# ===========================================================================
+
+
+class TestComputeRegionData:
+    """Tests for the compute_region_data function."""
+
+    def test_compute_region_data_aoc_mode(self, production_df, geometry_df):
+        """Test compute_region_data with AOC area type."""
+        result = compute_region_data("08/09", "AOC", production_df, geometry_df)
+
+        # Verify all expected keys are present
+        expected_keys = [
+            "df_wine_year",
+            "total_production",
+            "red_rose_production",
+            "white_production",
+            "df_map_red",
+            "df_map_white",
+        ]
+        assert list(result.keys()) == expected_keys
+
+        # Verify df_wine_year matches direct call
+        expected_df = get_df_wine_year_and_area("08/09", "AOC", production_df)
+        pd.testing.assert_frame_equal(result["df_wine_year"], expected_df)
+
+        # Verify total production sum
+        assert result["total_production"] == expected_df["Production"].sum()
+
+        # Verify red/rose production
+        red_rose_mask = expected_df["wine_type"] == "RED AND ROSE"
+        expected_red_rose = expected_df[red_rose_mask]["Production"].sum()
+        assert result["red_rose_production"] == expected_red_rose
+
+        # Verify white production
+        white_mask = expected_df["wine_type"] == "WHITE"
+        expected_white = expected_df[white_mask]["Production"].sum()
+        assert result["white_production"] == expected_white
+
+        # Verify map data
+        expected_df_map_red = get_df_map_red_rose("08/09", geometry_df)
+        pd.testing.assert_frame_equal(result["df_map_red"], expected_df_map_red)
+
+        expected_df_map_white = get_df_map_white("08/09", geometry_df)
+        pd.testing.assert_frame_equal(result["df_map_white"], expected_df_map_white)
+
+    def test_compute_region_data_region_mode(self, production_df, geometry_df):
+        """Test compute_region_data with Region area type."""
+        result = compute_region_data("08/09", "Region", production_df, geometry_df)
+
+        # Verify all expected keys are present
+        expected_keys = [
+            "df_wine_year",
+            "total_production",
+            "red_rose_production",
+            "white_production",
+            "df_map_red",
+            "df_map_white",
+        ]
+        assert list(result.keys()) == expected_keys
+
+        # Verify df_wine_year matches direct call
+        expected_df = get_df_wine_year_and_area("08/09", "Region", production_df)
+        pd.testing.assert_frame_equal(result["df_wine_year"], expected_df)
+
+        # Verify aggregated production values
+        assert result["total_production"] == expected_df["Production"].sum()
+
+        red_rose_mask = expected_df["wine_type"] == "RED AND ROSE"
+        expected_red_rose = expected_df[red_rose_mask]["Production"].sum()
+        assert result["red_rose_production"] == expected_red_rose
+
+        white_mask = expected_df["wine_type"] == "WHITE"
+        expected_white = expected_df[white_mask]["Production"].sum()
+        assert result["white_production"] == expected_white
+
+        # Verify map data (should be same regardless of area type)
+        expected_df_map_red = get_df_map_red_rose("08/09", geometry_df)
+        pd.testing.assert_frame_equal(result["df_map_red"], expected_df_map_red)
+
+        expected_df_map_white = get_df_map_white("08/09", geometry_df)
+        pd.testing.assert_frame_equal(result["df_map_white"], expected_df_map_white)
+
+    def test_compute_region_data_different_year(self, production_df, geometry_df):
+        """Test compute_region_data with a different year (09/10)."""
+        result = compute_region_data("09/10", "AOC", production_df, geometry_df)
+
+        # Verify df_wine_year matches direct call
+        expected_df = get_df_wine_year_and_area("09/10", "AOC", production_df)
+        pd.testing.assert_frame_equal(result["df_wine_year"], expected_df)
+
+        # Verify production values use correct year
+        assert result["total_production"] == expected_df["Production"].sum()
+
+        # Verify map data uses correct year
+        expected_df_map_red = get_df_map_red_rose("09/10", geometry_df)
+        pd.testing.assert_frame_equal(result["df_map_red"], expected_df_map_red)
+
+        expected_df_map_white = get_df_map_white("09/10", geometry_df)
+        pd.testing.assert_frame_equal(result["df_map_white"], expected_df_map_white)
+
+    def test_compute_region_data_no_mutation(self, production_df, geometry_df):
+        """Test that compute_region_data doesn't mutate input dataframes."""
+        production_copy = production_df.copy()
+        geometry_copy = geometry_df.copy()
+
+        compute_region_data("08/09", "AOC", production_df, geometry_df)
+
+        # Verify original dataframes unchanged
+        pd.testing.assert_frame_equal(production_df, production_copy)
+        pd.testing.assert_frame_equal(geometry_df, geometry_copy)
