@@ -3,7 +3,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Python Version](https://img.shields.io/badge/Python-3.9%E2%80%933.12-blue)
-![License](https://img.shields.io/badge/Taipy-4.1-blue.svg)
+![License](https://img.shields.io/badge/Taipy-4.1.1-blue.svg)
 [![codecov](https://codecov.io/github/enarroied/taipy_wine_app/branch/master/graph/badge.svg?token=HLZVB6WFMT)](https://codecov.io/github/enarroied/taipy_wine_app)
 
 - [TAIPY Wine Dashboard](#taipy-wine-dashboard)
